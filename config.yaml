@@ -1,0 +1,146 @@
+# Enhanced Simulation Framework Configuration
+# This file contains default configuration parameters for the framework
+
+framework:
+  name: "Enhanced Simulation & Hardware Abstraction Framework"
+  version: "1.0.0"
+  description: "Advanced physics simulation with 1.2×10¹⁰× amplification"
+  
+simulation:
+  time_span: [0.0, 10.0]  # [start_time, end_time] in seconds
+  time_steps: 1000
+  fidelity_validation: true
+  cross_domain_coupling: true
+  hardware_abstraction: true
+  export_results: true
+
+field_evolution:
+  n_fields: 20
+  max_golden_ratio_terms: 100
+  stochastic_amplitude: 1.0e-6
+  polymer_coupling_strength: 1.0e-4
+  coherence_preservation: true
+  hbar: 1.054571817e-34
+  renormalization_cutoff: 1.0e-12
+
+multi_physics:
+  domains: ["mechanical", "thermal", "electromagnetic", "quantum", "control"]
+  coupling_strength: 0.15
+  uncertainty_propagation_strength: 0.03
+  fidelity_target: 0.995
+  time_dependence_frequency: 1.0
+  correlation_matrix_size: 5
+  adaptive_refinement_threshold: 0.995
+
+einstein_maxwell:
+  spacetime_metric: "minkowski"  # Options: minkowski, schwarzschild, kerr, alcubierre
+  material_type: "metamaterial"  # Options: conductor, dielectric, metamaterial, superconductor
+  c: 299792458.0  # Speed of light (m/s)
+  G: 6.67430e-11  # Gravitational constant (m³/kg·s²)
+  epsilon_0: 8.8541878128e-12  # Vacuum permittivity (F/m)
+  mu_0: 1.25663706212e-6  # Vacuum permeability (H/m)
+  degradation_time_scale: 3600.0  # Material degradation time scale (s)
+  stress_threshold: 1.0e8  # Stress threshold for degradation (Pa)
+  temperature_threshold: 1000.0  # Temperature threshold (K)
+  field_threshold: 1.0e6  # Electric field threshold (V/m)
+
+metamaterial:
+  resonance_type: "hybrid"  # Options: plasmonic, magnetic, hybrid, phononic, excitonic
+  stacking_geometry: "fibonacci"  # Options: periodic, gradient, random, fibonacci, quasicrystal
+  n_layers: 25
+  target_frequency: 1.0e12  # Target frequency (Hz)
+  quality_factor_target: 1.5e4  # Q > 10⁴
+  amplification_target: 1.2e10  # 1.2×10¹⁰× target
+  layer_thickness: 1.0e-7  # Individual layer thickness (m)
+  dielectric_contrast: 10.0  # ε_high/ε_low contrast
+  loss_tangent: 1.0e-4  # Material loss tangent
+
+hardware_abstraction:
+  enable_virtual_sensors: true
+  enable_virtual_actuators: true
+  enable_virtual_instruments: true
+  measurement_noise: true
+  realistic_response_times: true
+  
+  # Virtual sensor specifications
+  electromagnetic_sensors:
+    e_field_noise: 1.0e-3  # V/m
+    b_field_noise: 1.0e-6  # T
+    
+  mechanical_sensors:
+    stress_noise: 1.0e4  # Pa
+    displacement_noise: 1.0e-12  # m
+    
+  thermal_sensors:
+    temperature_noise: 0.1  # K
+    
+  quantum_sensors:
+    coherence_noise: 0.01  # dimensionless
+
+validation:
+  enable_monte_carlo: true
+  monte_carlo_samples: 1000
+  enable_adaptive_refinement: true
+  refinement_factor: 1.1
+  enable_cross_validation: true
+  
+  # Target validation criteria
+  targets:
+    metamaterial_enhancement: 1.2e10  # 1.2×10¹⁰×
+    multiphysics_fidelity: 0.995  # R² ≥ 0.995
+    quality_factor: 1.0e4  # Q > 10⁴
+    golden_ratio_terms: 100  # φⁿ terms n ≥ 100
+
+export:
+  enable_json_export: true
+  enable_hdf5_export: false
+  enable_visualization: true
+  enable_validation_report: true
+  
+  # Export paths (relative to framework root)
+  output_directory: "simulation_output"
+  results_filename: "simulation_results.json"
+  validation_report_filename: "validation_report.md"
+  visualization_filename: "enhanced_simulation_results.png"
+
+logging:
+  level: "INFO"  # Options: DEBUG, INFO, WARNING, ERROR, CRITICAL
+  enable_file_logging: true
+  log_filename: "enhanced_simulation.log"
+  enable_console_logging: true
+  
+performance:
+  enable_gpu_acceleration: false
+  enable_multiprocessing: true
+  max_workers: 4
+  memory_limit_gb: 8
+  enable_progress_tracking: true
+
+# Advanced configuration options
+advanced:
+  enable_cuda: false
+  enable_experimental_features: false
+  debug_mode: false
+  profile_performance: false
+  
+  # Numerical precision settings
+  float_precision: "double"  # Options: single, double, extended
+  integration_method: "RK45"  # Options: Euler, RK4, RK45, DOP853
+  convergence_tolerance: 1.0e-8
+  
+  # Memory optimization
+  enable_memory_optimization: true
+  chunk_size: 1000
+  enable_garbage_collection: true
+
+# Repository integration settings
+integration:
+  enable_cross_repo_access: true
+  
+  # Repository paths (relative to workspace root)
+  repositories:
+    warp_spacetime_controller: "../warp-spacetime-stability-controller"
+    warp_field_coils: "../warp-field-coils"
+    casimir_platforms: "../casimir-environmental-enclosure-platform"
+    unified_lqg: "../unified-lqg"
+    metamaterial_coatings: "../casimir-anti-stiction-metasurface-coatings"
