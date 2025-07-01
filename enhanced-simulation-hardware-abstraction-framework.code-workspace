@@ -1,0 +1,84 @@
+{
+	"folders": [
+		{
+			"name": "enhanced-simulation-hardware-abstraction-framework (main)",
+			"path": "."
+		},
+		{
+			"name": "artificial-gravity-field-generator",
+			"path": "../artificial-gravity-field-generator"
+		},
+		{
+			"name": "casimir-anti-stiction-metasurface-coatings",
+			"path": "../casimir-anti-stiction-metasurface-coatings"
+		},
+		{
+			"name": "casimir-environmental-enclosure-platform",
+			"path": "../casimir-environmental-enclosure-platform"
+		},
+		{
+			"name": "casimir-nanopositioning-platform",
+			"path": "../casimir-nanopositioning-platform"
+		},
+		{
+			"name": "casimir-tunable-permittivity-stacks",
+			"path": "../casimir-tunable-permittivity-stacks"
+		},
+		{
+			"name": "lqg-anec-framework",
+			"path": "../lqg-anec-framework"
+		},
+		{
+			"name": "su2-3nj-closedform",
+			"path": "../su2-3nj-closedform"
+		},
+		{
+			"name": "su2-3nj-generating-functional",
+			"path": "../su2-3nj-generating-functional"
+		},
+		{
+			"name": "su2-3nj-uniform-closed-form",
+			"path": "../su2-3nj-uniform-closed-form"
+		},
+		{
+			"name": "su2-node-matrix-elements",
+			"path": "../su2-node-matrix-elements"
+		},
+		{
+			"name": "unified-lqg",
+			"path": "../unified-lqg"
+		},
+		{
+			"name": "warp-bubble-optimizer",
+			"path": "../warp-bubble-optimizer"
+		},
+		{
+			"name": "warp-field-coils",
+			"path": "../warp-field-coils"
+		},
+		{
+			"name": "warp-spacetime-stability-controller",
+			"path": "../warp-spacetime-stability-controller"
+		}
+	],
+	"settings": {
+		"python.defaultInterpreterPath": "C:\\Program Files\\Python313\\python.exe",
+		"files.exclude": {
+			"**/.git": true,
+			"**/node_modules": true,
+			"**/__pycache__": true,
+			"**/.pytest_cache": true,
+			"**/venv": true,
+			"**/.venv": true
+		},
+		"powershell.cwd": "enhanced-simulation-hardware-abstraction-framework (main)"
+	},
+	"extensions": {
+		"recommendations": [
+			"ms-python.python",
+			"ms-vscode.cpptools",
+			"james-yu.latex-workshop",
+			"ms-toolsai.jupyter"
+		]
+	}
+}
