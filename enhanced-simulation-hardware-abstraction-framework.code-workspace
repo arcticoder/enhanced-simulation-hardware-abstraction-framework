@@ -25,6 +25,10 @@
 			"path": "../casimir-tunable-permittivity-stacks"
 		},
 		{
+			"name": "energy",
+			"path": "../energy"
+		},
+		{
 			"name": "lqg-anec-framework",
 			"path": "../lqg-anec-framework"
 		},

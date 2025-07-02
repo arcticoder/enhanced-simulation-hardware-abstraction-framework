@@ -197,3 +197,6 @@ output/
 *.tar.gz
 *.rar
 *.7z
+
+# Progress tracking
+update-progress.txt
