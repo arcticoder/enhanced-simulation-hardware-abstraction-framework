@@ -1,3 +1,472 @@
 {
   "experiment_name": "integration_test",
-  "config": 
+  "config": {
+    "target_significance_enhancement": 200.0,
+    "base_significance_level": 0.05,
+    "enhanced_significance_level": 0.00025,
+    "n_initial_experiments": 10,
+    "n_adaptive_experiments": 20,
+    "acquisition_function": "expected_improvement",
+    "exploration_weight": 2.0,
+    "n_virtual_replications": 1000,
+    "monte_carlo_samples": 10000,
+    "cross_domain_correlation": true,
+    "parallel_experiment_batches": 10
+  },
+  "parameter_bounds": [
+    [
+      -1.0,
+      1.0
+    ],
+    [
+      -1.0,
+      1.0
+    ],
+    [
+      -1.0,
+      1.0
+    ],
+    [
+      -1.0,
+      1.0
+    ],
+    [
+      -1.0,
+      1.0
+    ]
+  ],
+  "experiments": [
+    {
+      "experiment_id": 0,
+      "phase": "initial",
+      "parameters": [
+        0.5994196256318558,
+        0.7738534977490996,
+        -0.2346050859066915,
+        0.1765945335303547,
+        -0.5318580127768391
+      ],
+      "result": 1.334618866155027,
+      "timestamp": 1751418477.6101577
+    },
+    {
+      "experiment_id": 1,
+      "phase": "initial",
+      "parameters": [
+        0.8235592057509526,
+        -0.847037728787885,
+        -0.881659543938609,
+        -0.7485634605035396,
+        -0.2481182765448673
+      ],
+      "result": 2.7949892205357747,
+      "timestamp": 1751418477.6101577
+    },
+    {
+      "experiment_id": 2,
+      "phase": "initial",
+      "parameters": [
+        0.3899632584032524,
+        0.971712820164766,
+        -0.0052893475066448925,
+        0.693127689405129,
+        -0.24722646636657442
+      ],
+      "result": 1.632819890271523,
+      "timestamp": 1751418477.6101577
+    },
+    {
+      "experiment_id": 3,
+      "phase": "initial",
+      "parameters": [
+        -0.18119162567588853,
+        -0.6237477586411848,
+        -0.957797784152129,
+        0.3366925579049267,
+        0.8285672974315859
+      ],
+      "result": 2.1375250499721394,
+      "timestamp": 1751418477.6101577
+    },
+    {
+      "experiment_id": 4,
+      "phase": "initial",
+      "parameters": [
+        0.20945387246322422,
+        -0.8485396373172565,
+        0.367060516891458,
+        0.4024769229355434,
+        0.3461888100564041
+      ],
+      "result": 1.1937557306950588,
+      "timestamp": 1751418477.6101577
+    },
+    {
+      "experiment_id": 5,
+      "phase": "initial",
+      "parameters": [
+        -0.9805010951454578,
+        0.5868607884324126,
+        -0.37306810466500706,
+        0.3464079125197439,
+        -0.1844453468702485
+      ],
+      "result": 1.592820714465365,
+      "timestamp": 1751418477.6101577
+    },
+    {
+      "experiment_id": 6,
+      "phase": "initial",
+      "parameters": [
+        0.7613661526662887,
+        0.2923443206726706,
+        -0.24515875348556015,
+        0.3676848824633314,
+        0.030337633012166965
+      ],
+      "result": 0.8567503092039315,
+      "timestamp": 1751418477.6101577
+    },
+    {
+      "experiment_id": 7,
+      "phase": "initial",
+      "parameters": [
+        0.23888520401284463,
+        -0.25073744189450764,
+        -0.77223224757232,
+        -0.3974746666523905,
+        -0.42313271782941886
+      ],
+      "result": 1.0630110114785973,
+      "timestamp": 1751418477.6101577
+    },
+    {
+      "experiment_id": 8,
+      "phase": "initial",
+      "parameters": [
+        0.698123427291997,
+        -0.06857654846186212,
+        -0.036405871681634006,
+        0.255676032002238,
+        0.9862191140164389
+      ],
+      "result": 1.5285081078507607,
+      "timestamp": 1751418477.6112034
+    },
+    {
+      "experiment_id": 9,
+      "phase": "initial",
+      "parameters": [
+        0.630525139992619,
+        0.7529096407402667,
+        0.4823999980657119,
+        -0.43627193980267753,
+        0.10868466660748788
+      ],
+      "result": 1.3863946117819475,
+      "timestamp": 1751418477.6112034
+    },
+    {
+      "experiment_id": 10,
+      "phase": "adaptive",
+      "batch": 0,
+      "parameters": [
+        0.896584408632168,
+        -0.9233094840309539,
+        -0.8967523946835698,
+        -0.7954828910856214,
+        -0.22675390101317322
+      ],
+      "result": 3.1320781220966087,
+      "timestamp": 1751418478.1251433
+    },
+    {
+      "experiment_id": 11,
+      "phase": "adaptive",
+      "batch": 0,
+      "parameters": [
+        -0.16170259293600994,
+        -0.6418735962969728,
+        -0.7452780189167352,
+        0.19289618226415517,
+        0.621934922793222
+      ],
+      "result": 1.4284109875130817,
+      "timestamp": 1751418478.1251433
+    },
+    {
+      "experiment_id": 12,
+      "phase": "adaptive",
+      "batch": 1,
+      "parameters": [
+        -0.37764808459407484,
+        0.16942895207821507,
+        0.7175609587082536,
+        0.9790455589269846,
+        -0.1732995960954551
+      ],
+      "result": 1.656589152917614,
+      "timestamp": 1751418478.444791
+    },
+    {
+      "experiment_id": 13,
+      "phase": "adaptive",
+      "batch": 1,
+      "parameters": [
+        -0.21356818760798174,
+        -0.5910834998909027,
+        -1.0,
+        0.5850247418512389,
+        1.0
+      ],
+      "result": 2.751323073199393,
+      "timestamp": 1751418478.444791
+    },
+    {
+      "experiment_id": 14,
+      "phase": "adaptive",
+      "batch": 2,
+      "parameters": [
+        1.0,
+        -1.0,
+        -1.0,
+        -1.0,
+        -0.13916714441303946
+      ],
+      "result": 4.022639635664646,
+      "timestamp": 1751418479.9500148
+    },
+    {
+      "experiment_id": 15,
+      "phase": "adaptive",
+      "batch": 2,
+      "parameters": [
+        1.0,
+        -1.0,
+        -1.0,
+        -1.0,
+        -0.13916714467481592
+      ],
+      "result": 4.033578220945055,
+      "timestamp": 1751418479.9500148
+    },
+    {
+      "experiment_id": 16,
+      "phase": "adaptive",
+      "batch": 3,
+      "parameters": [
+        1.0,
+        -1.0,
+        -1.0,
+        -1.0,
+        0.5201706078904734
+      ],
+      "result": 4.280779733564575,
+      "timestamp": 1751418481.423355
+    },
+    {
+      "experiment_id": 17,
+      "phase": "adaptive",
+      "batch": 3,
+      "parameters": [
+        1.0,
+        -1.0,
+        -1.0,
+        -1.0,
+        0.5201594635359688
+      ],
+      "result": 4.2426658543166385,
+      "timestamp": 1751418481.423355
+    },
+    {
+      "experiment_id": 18,
+      "phase": "adaptive",
+      "batch": 4,
+      "parameters": [
+        -0.8593627630959458,
+        1.0,
+        -1.0,
+        1.0,
+        1.0
+      ],
+      "result": 4.739096632839193,
+      "timestamp": 1751418482.6176662
+    },
+    {
+      "experiment_id": 19,
+      "phase": "adaptive",
+      "batch": 4,
+      "parameters": [
+        1.0,
+        1.0,
+        -1.0,
+        -1.0,
+        1.0
+      ],
+      "result": 5.007514487157238,
+      "timestamp": 1751418482.6176662
+    },
+    {
+      "experiment_id": 20,
+      "phase": "adaptive",
+      "batch": 5,
+      "parameters": [
+        -1.0,
+        -1.0,
+        1.0,
+        -1.0,
+        -1.0
+      ],
+      "result": 4.990697884792184,
+      "timestamp": 1751418483.3217077
+    },
+    {
+      "experiment_id": 21,
+      "phase": "adaptive",
+      "batch": 5,
+      "parameters": [
+        -0.09758309685234903,
+        1.0,
+        -1.0,
+        -1.0,
+        1.0
+      ],
+      "result": 4.015109933906256,
+      "timestamp": 1751418483.3217077
+    },
+    {
+      "experiment_id": 22,
+      "phase": "adaptive",
+      "batch": 6,
+      "parameters": [
+        -1.0,
+        -1.0,
+        1.0,
+        -1.0,
+        1.0
+      ],
+      "result": 5.002868187093476,
+      "timestamp": 1751418484.14185
+    },
+    {
+      "experiment_id": 23,
+      "phase": "adaptive",
+      "batch": 6,
+      "parameters": [
+        0.0707610833422252,
+        -1.0,
+        1.0,
+        -1.0,
+        -1.0
+      ],
+      "result": 4.014387626624479,
+      "timestamp": 1751418484.14185
+    },
+    {
+      "experiment_id": 24,
+      "phase": "adaptive",
+      "batch": 7,
+      "parameters": [
+        -1.0,
+        -1.0,
+        1.0,
+        -1.0,
+        -0.011555450142553486
+      ],
+      "result": 4.009334052382216,
+      "timestamp": 1751418484.7622626
+    },
+    {
+      "experiment_id": 25,
+      "phase": "adaptive",
+      "batch": 7,
+      "parameters": [
+        -1.0,
+        -1.0,
+        1.0,
+        -1.0,
+        -0.011547596081768663
+      ],
+      "result": 3.9964962826557042,
+      "timestamp": 1751418484.7622626
+    },
+    {
+      "experiment_id": 26,
+      "phase": "adaptive",
+      "batch": 8,
+      "parameters": [
+        -1.0,
+        -0.0561370543252629,
+        1.0,
+        -1.0,
+        -1.0
+      ],
+      "result": 4.014928013346179,
+      "timestamp": 1751418485.440081
+    },
+    {
+      "experiment_id": 27,
+      "phase": "adaptive",
+      "batch": 8,
+      "parameters": [
+        -1.0,
+        -1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "result": 5.006704934363177,
+      "timestamp": 1751418485.440081
+    },
+    {
+      "experiment_id": 28,
+      "phase": "adaptive",
+      "batch": 9,
+      "parameters": [
+        -1.0,
+        1.0,
+        1.0,
+        -1.0,
+        1.0
+      ],
+      "result": 4.99346914066887,
+      "timestamp": 1751418486.0625181
+    },
+    {
+      "experiment_id": 29,
+      "phase": "adaptive",
+      "batch": 9,
+      "parameters": [
+        -0.9769555481391287,
+        0.27693620395149054,
+        0.7971737686249929,
+        0.24404063937466736,
+        -0.8664641354513763
+      ],
+      "result": 2.484459746073255,
+      "timestamp": 1751418486.0680442
+    }
+  ],
+  "statistics": {
+    "original_t_statistic": -8.389821161461263,
+    "original_p_value": 6.818630170184479e-09,
+    "enhanced_p_value": 0.47608006900847977,
+    "enhancement_factor": 0.10502435042940103,
+    "enhancement_achieved": 0.10502435042940103,
+    "cohens_d": -3.063529535711017,
+    "statistical_power": 0.9999988638372402,
+    "confidence_level": 0.99975,
+    "n_bootstrap_samples": 10000,
+    "is_significant_enhanced": false,
+    "target_significance_met": false
+  },
+  "enhancement_metrics": {
+    "total_experiments": 30,
+    "initial_experiments": 10,
+    "adaptive_experiments": 20,
+    "enhancement_factor_achieved": 0.10502435042940103,
+    "target_enhancement": 200.0,
+    "target_met": false,
+    "execution_time": 21.1384596824646
+  }
+}

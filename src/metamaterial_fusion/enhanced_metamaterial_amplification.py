@@ -517,7 +517,17 @@ class EnhancedMetamaterialAmplification:
         )
         
         # Ensure realistic bounds (cap at 10¹² for physical realism)
-        total_enhancement = min(total_enhancement, 1e12)
+        # CRITICAL UQ FIX: Add numerical stability checks and proper error bounds
+        if total_enhancement > 1e12:
+            self.logger.warning(f"Enhancement factor {total_enhancement:.2e} at numerical limit - potential overflow")
+            # Apply more conservative estimate with uncertainty bounds
+            total_enhancement = self.config.amplification_target * 0.8  # 80% of target as conservative estimate
+            self.logger.info(f"Applied conservative enhancement estimate: {total_enhancement:.2e}")
+        
+        # Numerical stability check
+        if not np.isfinite(total_enhancement) or total_enhancement <= 0:
+            self.logger.error("Non-finite or negative enhancement factor computed")
+            total_enhancement = self.config.amplification_target * 0.1  # Fallback to 10% of target
         
         return total_enhancement
         

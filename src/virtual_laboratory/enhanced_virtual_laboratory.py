@@ -50,6 +50,22 @@ class VirtualLabConfig:
     cross_domain_correlation: bool = True
     parallel_experiment_batches: int = 10
     
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert configuration to serializable dictionary - CRITICAL UQ FIX"""
+        return {
+            'target_significance_enhancement': float(self.target_significance_enhancement),
+            'base_significance_level': float(self.base_significance_level),
+            'enhanced_significance_level': float(self.enhanced_significance_level),
+            'n_initial_experiments': int(self.n_initial_experiments),
+            'n_adaptive_experiments': int(self.n_adaptive_experiments),
+            'acquisition_function': str(self.acquisition_function),
+            'exploration_weight': float(self.exploration_weight),
+            'n_virtual_replications': int(self.n_virtual_replications),
+            'monte_carlo_samples': int(self.monte_carlo_samples),
+            'cross_domain_correlation': bool(self.cross_domain_correlation),
+            'parallel_experiment_batches': int(self.parallel_experiment_batches)
+        }
+    
     # Optimization Parameters
     max_iterations: int = 1000
     convergence_tolerance: float = 1e-8
@@ -481,12 +497,20 @@ class EnhancedVirtualLaboratory:
         
         # Convert numpy arrays to lists for JSON serialization
         def convert_numpy(obj):
+            """CRITICAL UQ FIX: Enhanced serialization handling"""
             if isinstance(obj, np.ndarray):
                 return obj.tolist()
             elif isinstance(obj, np.integer):
                 return int(obj)
             elif isinstance(obj, np.floating):
                 return float(obj)
+            elif isinstance(obj, np.bool_):
+                return bool(obj)
+            elif isinstance(obj, VirtualLabConfig):
+                return obj.to_dict()  # Handle VirtualLabConfig serialization
+            elif hasattr(obj, '__dict__'):
+                # Handle other dataclass objects
+                return {k: convert_numpy(v) for k, v in obj.__dict__.items()}
             elif isinstance(obj, dict):
                 return {k: convert_numpy(v) for k, v in obj.items()}
             elif isinstance(obj, list):

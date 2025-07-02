@@ -541,6 +541,10 @@ class EnhancedCorrelationMatrix:
     def validate_correlation_structure(self) -> bool:
         """Validate correlation matrix structure - public interface"""
         return self._validate_correlation_matrix()
+    
+    def get_frequency_dependent_correlations(self, frequency: float) -> np.ndarray:
+        """Get frequency-dependent correlation matrix - CRITICAL UQ FIX"""
+        return self.get_correlation_matrix(frequency=frequency)
 
 def create_enhanced_correlation_matrix(config: Optional[CorrelationMatrixConfig] = None) -> EnhancedCorrelationMatrix:
     """

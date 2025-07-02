@@ -1,3 +1,190 @@
 {
   "experiment_name": "unit_test",
-  "config": 
+  "config": {
+    "target_significance_enhancement": 200.0,
+    "base_significance_level": 0.05,
+    "enhanced_significance_level": 0.00025,
+    "n_initial_experiments": 5,
+    "n_adaptive_experiments": 10,
+    "acquisition_function": "expected_improvement",
+    "exploration_weight": 2.0,
+    "n_virtual_replications": 1000,
+    "monte_carlo_samples": 10000,
+    "cross_domain_correlation": true,
+    "parallel_experiment_batches": 10
+  },
+  "parameter_bounds": [
+    [
+      -1.0,
+      1.0
+    ],
+    [
+      -1.0,
+      1.0
+    ]
+  ],
+  "experiments": [
+    {
+      "experiment_id": 0,
+      "phase": "initial",
+      "parameters": [
+        -0.22915371735242274,
+        0.2200467337183547
+      ],
+      "result": 0.10357275246310517,
+      "timestamp": 1751418474.1934912
+    },
+    {
+      "experiment_id": 1,
+      "phase": "initial",
+      "parameters": [
+        0.6225248646583716,
+        0.24094846120762448
+      ],
+      "result": 0.4358792538394508,
+      "timestamp": 1751418474.194603
+    },
+    {
+      "experiment_id": 2,
+      "phase": "initial",
+      "parameters": [
+        0.12024662683270115,
+        -0.7166962685241187
+      ],
+      "result": 0.5299195112544256,
+      "timestamp": 1751418474.194603
+    },
+    {
+      "experiment_id": 3,
+      "phase": "initial",
+      "parameters": [
+        0.7579864048422273,
+        0.8968971858959329
+      ],
+      "result": 1.393360390378969,
+      "timestamp": 1751418474.194603
+    },
+    {
+      "experiment_id": 4,
+      "phase": "initial",
+      "parameters": [
+        0.8311275705385404,
+        0.07959050926560796
+      ],
+      "result": 0.7013844370842449,
+      "timestamp": 1751418474.194603
+    },
+    {
+      "experiment_id": 5,
+      "phase": "adaptive",
+      "batch": 0,
+      "parameters": [
+        0.8651310768541196,
+        1.0
+      ],
+      "result": 1.74600721401427,
+      "timestamp": 1751418474.5361907
+    },
+    {
+      "experiment_id": 6,
+      "phase": "adaptive",
+      "batch": 1,
+      "parameters": [
+        -1.0,
+        -1.0
+      ],
+      "result": 1.9959597509902645,
+      "timestamp": 1751418474.7991393
+    },
+    {
+      "experiment_id": 7,
+      "phase": "adaptive",
+      "batch": 2,
+      "parameters": [
+        -1.0,
+        -0.6257262025104382
+      ],
+      "result": 1.3998395271663704,
+      "timestamp": 1751418475.0535805
+    },
+    {
+      "experiment_id": 8,
+      "phase": "adaptive",
+      "batch": 3,
+      "parameters": [
+        1.0,
+        1.0
+      ],
+      "result": 2.0127089875121276,
+      "timestamp": 1751418475.2825437
+    },
+    {
+      "experiment_id": 9,
+      "phase": "adaptive",
+      "batch": 4,
+      "parameters": [
+        -1.0,
+        1.0
+      ],
+      "result": 2.0160792122138766,
+      "timestamp": 1751418475.5545704
+    },
+    {
+      "experiment_id": 10,
+      "phase": "adaptive",
+      "batch": 5,
+      "parameters": [
+        1.0,
+        -1.0
+      ],
+      "result": 2.001581129735,
+      "timestamp": 1751418475.8536937
+    },
+    {
+      "experiment_id": 11,
+      "phase": "adaptive",
+      "batch": 6,
+      "parameters": [
+        -0.9663947712926908,
+        0.5961105689287549
+      ],
+      "result": 1.2913686905138917,
+      "timestamp": 1751418476.1281915
+    },
+    {
+      "experiment_id": 12,
+      "phase": "adaptive",
+      "batch": 7,
+      "parameters": [
+        -0.2418538071446319,
+        -0.9238730216401163
+      ],
+      "result": 0.8958916114349592,
+      "timestamp": 1751418476.3454251
+    },
+    {
+      "experiment_id": 13,
+      "phase": "adaptive",
+      "batch": 8,
+      "parameters": [
+        -0.70079445270119,
+        0.904457840599356
+      ],
+      "result": 1.3122974812564594,
+      "timestamp": 1751418476.541355
+    },
+    {
+      "experiment_id": 14,
+      "phase": "adaptive",
+      "batch": 9,
+      "parameters": [
+        0.780157776179111,
+        0.957294994058044
+      ],
+      "result": 1.527159271122366,
+      "timestamp": 1751418476.840273
+    }
+  ],
+  "statistics": {},
+  "enhancement_metrics": {}
+}
