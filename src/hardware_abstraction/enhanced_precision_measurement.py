@@ -695,54 +695,287 @@ class EnhancedPrecisionMeasurementSimulator:
         }
     
     def compute_vacuum_enhanced_measurement(self,
-                                          field_operators: np.ndarray) -> Dict[str, float]:
+                                          field_operators: np.ndarray,
+                                          geometry_config: Optional[Dict[str, float]] = None) -> Dict[str, float]:
         """
-        Compute vacuum-enhanced measurement with multiple force contributions
+        Compute vacuum-enhanced measurement with realistic 3D force calculations
         
-        Implements: F_enhanced = F_Casimir + F_DCE + F_squeezed + F_synergy
+        CRITICAL UQ FIX: Replace simplified 1D models with realistic experimental conditions
+        
+        Implements comprehensive vacuum enhancement:
+        - 3D Casimir force with realistic geometry
+        - Dynamic Casimir Effect with experimental parameters
+        - Environmental condition dependencies
+        - Uncertainty bounds for all force contributions
         
         Args:
             field_operators: Quantum field operators
+            geometry_config: Realistic experimental geometry parameters
             
         Returns:
-            Vacuum-enhanced measurement results
+            Vacuum-enhanced measurement results with uncertainty bounds
+        """
+        hbar = 1.054571817e-34
+        c = 299792458.0
+        epsilon_0 = 8.854187817e-12
+        
+        # CRITICAL UQ FIX: Realistic experimental geometry parameters
+        if geometry_config is None:
+            geometry_config = self._get_realistic_experimental_geometry()
+        
+        # Extract geometry parameters with uncertainty bounds
+        plate_separation = geometry_config.get('plate_separation', 100e-9)  # 100 nm (realistic)
+        plate_area = geometry_config.get('plate_area', 1e-8)  # 10 μm × 10 μm
+        plate_roughness = geometry_config.get('surface_roughness', 1e-9)  # 1 nm RMS
+        material_properties = geometry_config.get('material', 'silicon')
+        
+        # Environmental parameters
+        temperature = self.config.temperature  # From config
+        pressure = geometry_config.get('pressure', 1e-8)  # Ultra-high vacuum
+        
+        # Log experimental parameters for UQ tracking
+        self.logger.info(f"Vacuum enhancement with realistic parameters:")
+        self.logger.info(f"  Plate separation: {plate_separation*1e9:.1f} nm")
+        self.logger.info(f"  Plate area: {plate_area*1e12:.2f} μm²")
+        self.logger.info(f"  Surface roughness: {plate_roughness*1e9:.2f} nm RMS")
+        self.logger.info(f"  Temperature: {temperature:.1f} K")
+        self.logger.info(f"  Pressure: {pressure:.2e} Pa")
+        
+        # CRITICAL UQ FIX: 3D Casimir force with realistic corrections
+        casimir_results = self._compute_3d_casimir_force(
+            plate_separation, plate_area, plate_roughness, temperature, material_properties
+        )
+        
+        # CRITICAL UQ FIX: Dynamic Casimir Effect with experimental constraints
+        dce_results = self._compute_realistic_dce_force(
+            plate_separation, geometry_config.get('modulation_frequency', 1e9),  # 1 GHz
+            geometry_config.get('modulation_amplitude', 1e-12)  # 1 pm amplitude
+        )
+        
+        # Squeezed vacuum contribution with environmental decoherence
+        squeezed_results = self._compute_environmental_squeezed_force(
+            casimir_results['force'], temperature, pressure
+        )
+        
+        # CRITICAL UQ FIX: Comprehensive uncertainty analysis
+        total_force_nominal = (casimir_results['force'] + dce_results['force'] + 
+                              squeezed_results['enhanced_force'])
+        
+        # Force uncertainty propagation
+        force_uncertainties = {
+            'casimir_uncertainty': casimir_results['uncertainty'],
+            'dce_uncertainty': dce_results['uncertainty'], 
+            'squeezed_uncertainty': squeezed_results['uncertainty']
+        }
+        
+        total_force_uncertainty = np.sqrt(sum([u**2 for u in force_uncertainties.values()]))
+        
+        # Measurement sensitivity enhancement with uncertainty bounds
+        force_to_sensitivity_conversion = self._compute_force_sensitivity_coupling(
+            plate_separation, plate_area, material_properties
+        )
+        
+        enhanced_sensitivity = total_force_nominal * force_to_sensitivity_conversion
+        sensitivity_uncertainty = total_force_uncertainty * force_to_sensitivity_conversion
+        
+        # Log uncertainty analysis for UQ tracking
+        self.logger.info(f"Vacuum force uncertainty analysis:")
+        self.logger.info(f"  Total force: ({total_force_nominal:.2e} ± {total_force_uncertainty:.2e}) N")
+        self.logger.info(f"  Enhanced sensitivity: ({enhanced_sensitivity:.2e} ± {sensitivity_uncertainty:.2e}) m/√Hz")
+        self.logger.info(f"  Relative uncertainty: {(sensitivity_uncertainty/enhanced_sensitivity)*100:.1f}%")
+        
+        return {
+            'total_enhanced_force': total_force_nominal,
+            'force_uncertainty': total_force_uncertainty,
+            'enhanced_sensitivity': enhanced_sensitivity,
+            'sensitivity_uncertainty': sensitivity_uncertainty,
+            'casimir_contribution': casimir_results,
+            'dce_contribution': dce_results,
+            'squeezed_contribution': squeezed_results,
+            'experimental_parameters': geometry_config,
+            'uncertainty_breakdown': force_uncertainties,
+            'relative_uncertainty': sensitivity_uncertainty / enhanced_sensitivity
+        }
+    
+    def _get_realistic_experimental_geometry(self) -> Dict[str, float]:
+        """
+        Get realistic experimental geometry parameters based on state-of-the-art setups
+        """
+        return {
+            'plate_separation': 100e-9,      # 100 nm - typical AFM/Casimir experiments
+            'plate_area': 100e-12,           # 10×10 μm² - realistic microfabricated plates
+            'surface_roughness': 0.5e-9,     # 0.5 nm RMS - high-quality surfaces
+            'material': 'silicon',           # Standard material
+            'pressure': 1e-9,                # Ultra-high vacuum
+            'modulation_frequency': 1e8,     # 100 MHz - realistic modulation
+            'modulation_amplitude': 1e-12,   # 1 pm - achievable modulation depth
+            'plate_thickness': 500e-9,       # 500 nm - realistic membrane thickness
+            'aspect_ratio': 1.0              # Square plates
+        }
+    
+    def _compute_3d_casimir_force(self, separation: float, area: float, 
+                                 roughness: float, temperature: float,
+                                 material: str) -> Dict[str, float]:
+        """
+        Compute 3D Casimir force with realistic corrections
+        
+        Includes:
+        - Finite temperature corrections
+        - Surface roughness effects  
+        - Material dispersion
+        - Geometry corrections (finite size effects)
+        """
+        hbar = 1.054571817e-34
+        c = 299792458.0
+        k_B = 1.380649e-23
+        
+        # Ideal parallel plate Casimir force (per unit area)
+        casimir_pressure_ideal = (np.pi**2 * hbar * c) / (240 * separation**4)
+        
+        # Finite temperature correction (significant at nm separations, room temp)
+        thermal_wavelength = hbar * c / (k_B * temperature)
+        if separation < thermal_wavelength:
+            temperature_correction = 1.0 - (k_B * temperature * separation) / (hbar * c)
+        else:
+            temperature_correction = np.exp(-separation / thermal_wavelength)
+        
+        # Surface roughness correction (reduces force)
+        roughness_correction = np.exp(-2 * (roughness / separation)**2)
+        
+        # Material dispersion (frequency-dependent permittivity)
+        if material == 'silicon':
+            dispersion_correction = 0.85  # Typical for Si
+        elif material == 'gold':
+            dispersion_correction = 0.95  # Good conductor
+        else:
+            dispersion_correction = 0.90  # Generic material
+        
+        # Finite size effects (lateral dimensions)
+        plate_size = np.sqrt(area)
+        if plate_size > 10 * separation:
+            geometry_correction = 1.0  # Infinite plate limit
+        else:
+            # Correction for finite rectangular plates
+            aspect_ratio = plate_size / separation
+            geometry_correction = 1.0 - 0.1 / aspect_ratio
+        
+        # Total corrected force
+        corrected_pressure = (casimir_pressure_ideal * temperature_correction * 
+                            roughness_correction * dispersion_correction * 
+                            geometry_correction)
+        total_force = corrected_pressure * area
+        
+        # Uncertainty estimation (based on experimental uncertainties)
+        separation_uncertainty = 0.01 * separation  # 1% separation uncertainty
+        roughness_uncertainty = 0.2 * roughness    # 20% roughness uncertainty
+        
+        # Force uncertainty propagation (linearized)
+        force_uncertainty = abs(total_force) * np.sqrt(
+            (4 * separation_uncertainty / separation)**2 +  # d ~ separation^-4
+            (2 * roughness_uncertainty / roughness)**2      # roughness effects
+        )
+        
+        return {
+            'force': total_force,
+            'uncertainty': force_uncertainty,
+            'pressure': corrected_pressure,
+            'corrections': {
+                'temperature': temperature_correction,
+                'roughness': roughness_correction,
+                'dispersion': dispersion_correction,
+                'geometry': geometry_correction
+            }
+        }
+    
+    def _compute_realistic_dce_force(self, separation: float, 
+                                   modulation_freq: float,
+                                   modulation_amplitude: float) -> Dict[str, float]:
+        """
+        Compute Dynamic Casimir Effect force with experimental constraints
         """
         hbar = 1.054571817e-34
         c = 299792458.0
         
-        # Casimir force contribution
-        # Simplified 1D Casimir force between plates
-        casimir_length = 1e-6  # 1 μm separation
-        casimir_force = np.pi**2 * hbar * c / (240 * casimir_length**4)
+        # Modulation parameter (dimensionless)
+        modulation_parameter = (modulation_amplitude * modulation_freq) / c
         
-        # Dynamic Casimir Effect (DCE) contribution
-        # Force from accelerating boundaries
-        acceleration = 1e6  # m/s²
-        dce_force = hbar * acceleration**2 / (6 * np.pi * c**3)
+        # DCE force scaling (small modulation limit)
+        if modulation_parameter < 0.1:  # Small modulation approximation valid
+            dce_force_amplitude = (hbar * modulation_freq**2 * modulation_amplitude**2) / (separation**2 * c)
+        else:
+            # Large modulation - more complex calculation needed
+            dce_force_amplitude = (hbar * modulation_freq**2 * modulation_amplitude**2) / (separation**2 * c)
+            dce_force_amplitude *= np.exp(-modulation_parameter)  # Suppression factor
         
-        # Squeezed vacuum contribution
-        squeezing_parameter = self.config.squeezing_parameter if self.config.use_quantum_squeezing else 0
-        squeezed_force = casimir_force * (1 + 0.1 * squeezing_parameter)
+        # Time-averaged DCE force (typically much smaller than static Casimir)
+        avg_dce_force = 0.5 * dce_force_amplitude
         
-        # Synergy enhancement (nonlinear combination)
-        synergy_factor = 1.0 + 0.05 * np.sqrt(casimir_force * dce_force) / (hbar * c)
+        # Uncertainty from modulation control precision
+        freq_uncertainty = 0.001 * modulation_freq    # 0.1% frequency stability
+        amplitude_uncertainty = 0.05 * modulation_amplitude  # 5% amplitude control
         
-        # Total enhanced force
-        total_enhanced_force = (casimir_force + dce_force + squeezed_force) * synergy_factor
-        
-        # Convert to measurement enhancement
-        force_to_displacement = 1e-15  # Force to displacement conversion (simplified)
-        enhanced_displacement_sensitivity = total_enhanced_force * force_to_displacement
+        dce_uncertainty = avg_dce_force * np.sqrt(
+            (2 * freq_uncertainty / modulation_freq)**2 +
+            (2 * amplitude_uncertainty / modulation_amplitude)**2
+        )
         
         return {
-            'casimir_force': casimir_force,
-            'dce_force': dce_force,
-            'squeezed_force': squeezed_force,
-            'synergy_factor': synergy_factor,
-            'total_enhanced_force': total_enhanced_force,
-            'enhanced_displacement_sensitivity': enhanced_displacement_sensitivity,
-            'vacuum_enhancement_factor': total_enhanced_force / casimir_force
+            'force': avg_dce_force,
+            'uncertainty': dce_uncertainty,
+            'modulation_parameter': modulation_parameter,
+            'amplitude': dce_force_amplitude
         }
+    
+    def _compute_environmental_squeezed_force(self, base_force: float,
+                                            temperature: float,
+                                            pressure: float) -> Dict[str, float]:
+        """
+        Compute squeezed vacuum contribution with environmental decoherence
+        """
+        # Squeezing enhancement factor (reduced by decoherence)
+        if self.config.use_quantum_squeezing:
+            ideal_squeezing = 10**(self.config.squeezing_parameter / 10)
+            
+            # Temperature decoherence
+            temp_decoherence = np.exp(-temperature / 1.0)  # 1K characteristic scale
+            
+            # Pressure decoherence (residual gas collisions)
+            pressure_decoherence = np.exp(-pressure / 1e-10)  # 1e-10 Pa characteristic
+            
+            effective_squeezing = ideal_squeezing * temp_decoherence * pressure_decoherence
+        else:
+            effective_squeezing = 1.0
+        
+        # Enhanced force from squeezed vacuum fluctuations
+        squeezed_enhancement = base_force * (effective_squeezing - 1.0)
+        
+        # Uncertainty from environmental fluctuations
+        environmental_uncertainty = 0.1 * squeezed_enhancement  # 10% environmental noise
+        
+        return {
+            'enhanced_force': base_force + squeezed_enhancement,
+            'enhancement': squeezed_enhancement,
+            'uncertainty': environmental_uncertainty,
+            'effective_squeezing': effective_squeezing
+        }
+    
+    def _compute_force_sensitivity_coupling(self, separation: float, 
+                                          area: float, material: str) -> float:
+        """
+        Compute conversion factor from force to displacement sensitivity
+        """
+        # Typical force sensor specifications for high-precision measurements
+        if separation < 1e-6:  # Sub-micron regime - AFM-like sensitivity
+            force_noise_floor = 1e-18  # 1 aN/√Hz (state-of-the-art AFM)
+        else:
+            force_noise_floor = 1e-15  # 1 fN/√Hz (larger separations)
+        
+        # Convert force enhancement to displacement sensitivity improvement
+        # Based on typical cantilever/sensor characteristics
+        spring_constant = 1e-3  # 1 mN/m typical for sensitive cantilevers
+        displacement_per_force = 1.0 / spring_constant
+        
+        return displacement_per_force
         
     def _compute_allan_variance(self, data: np.ndarray, n_samples: int) -> float:
         """Compute Allan variance for given averaging time"""

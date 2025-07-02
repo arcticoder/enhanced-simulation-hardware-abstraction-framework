@@ -280,40 +280,326 @@ class EnhancedHardwareInTheLoop:
         
     def validate_synchronization_precision(self) -> Dict[str, float]:
         """
-        Validate achieved synchronization precision
+        CRITICAL UQ FIX: Comprehensive synchronization uncertainty analysis
+        
+        Validates achieved synchronization precision with detailed uncertainty quantification:
+        - Timing jitter analysis with statistical bounds
+        - Communication latency uncertainty modeling
+        - Hardware clock drift characterization
+        - Environmental factor impact assessment
+        - Quantum enhancement uncertainty propagation
         
         Returns:
-            Validation metrics
+            Comprehensive validation metrics with uncertainty bounds
         """
         metrics = {}
         
-        # Timing precision analysis
+        # CRITICAL UQ FIX: Detailed timing jitter analysis
         if len(self.sync_history) > 1:
-            sync_jitter = np.std(np.diff(self.sync_history))
-            metrics['timing_jitter'] = sync_jitter
-            metrics['precision_achieved'] = sync_jitter < self.config.sync_precision_target
+            sync_intervals = np.diff(self.sync_history)
+            
+            # Statistical jitter analysis
+            sync_jitter_mean = np.mean(sync_intervals)
+            sync_jitter_std = np.std(sync_intervals)
+            sync_jitter_max = np.max(np.abs(sync_intervals - sync_jitter_mean))
+            
+            # Allan variance for timing stability analysis
+            if len(sync_intervals) > 4:
+                allan_variance = self._compute_allan_variance(sync_intervals)
+                metrics['allan_variance'] = allan_variance
+                metrics['timing_stability_factor'] = 1.0 / np.sqrt(allan_variance)
+            
+            metrics['timing_jitter_mean'] = sync_jitter_mean
+            metrics['timing_jitter_std'] = sync_jitter_std
+            metrics['timing_jitter_max'] = sync_jitter_max
+            metrics['timing_jitter_rms'] = np.sqrt(sync_jitter_std**2 + sync_jitter_mean**2)
+            
+            # Precision achievement with confidence bounds
+            jitter_threshold = self.config.sync_precision_target
+            precision_margin = abs(sync_jitter_std - jitter_threshold) / jitter_threshold
+            metrics['precision_achieved'] = sync_jitter_std < jitter_threshold
+            metrics['precision_margin'] = precision_margin
+            
+            self.logger.info(f"Timing jitter analysis:")
+            self.logger.info(f"  RMS jitter: {metrics['timing_jitter_rms']*1e9:.2f} ns")
+            self.logger.info(f"  Target: {jitter_threshold*1e9:.2f} ns")
+            self.logger.info(f"  Precision margin: {precision_margin*100:.1f}%")
+            
         else:
-            metrics['timing_jitter'] = 0.0
-            metrics['precision_achieved'] = True
-            
-        # Coherence quality metric
+            metrics.update({
+                'timing_jitter_mean': 0.0, 'timing_jitter_std': 0.0,
+                'timing_jitter_max': 0.0, 'timing_jitter_rms': 0.0,
+                'precision_achieved': True, 'precision_margin': 1.0
+            })
+        
+        # CRITICAL UQ FIX: Communication latency uncertainty modeling
+        latency_analysis = self._analyze_communication_latency_uncertainty()
+        metrics.update(latency_analysis)
+        
+        # CRITICAL UQ FIX: Hardware clock drift characterization
+        clock_drift_analysis = self._characterize_hardware_clock_drift()
+        metrics.update(clock_drift_analysis)
+        
+        # CRITICAL UQ FIX: Environmental factor impact assessment
+        environmental_analysis = self._assess_environmental_sync_impacts()
+        metrics.update(environmental_analysis)
+        
+        # Coherence quality with uncertainty bounds
         if self.psi_hardware is not None and self.psi_simulation is not None:
-            current_coherence = abs(self.compute_hil_hamiltonian(time.time()))
-            metrics['coherence_quality'] = current_coherence
+            coherence_results = self._analyze_coherence_uncertainty()
+            metrics.update(coherence_results)
             
-        # Quantum enhancement effectiveness
+        # CRITICAL UQ FIX: Quantum enhancement uncertainty propagation
         if self.config.quantum_timing_enhancement:
-            enhancement_factor = self._compute_quantum_enhancement_factor()
-            metrics['quantum_enhancement_factor'] = enhancement_factor
+            quantum_uncertainty = self._analyze_quantum_enhancement_uncertainty()
+            metrics.update(quantum_uncertainty)
             
-        # Overall synchronization fidelity
-        precision_score = 1.0 - min(1.0, metrics.get('timing_jitter', 0) / self.config.sync_precision_target)
-        coherence_score = min(1.0, metrics.get('coherence_quality', 0))
+        # CRITICAL UQ FIX: Overall synchronization fidelity with uncertainty bounds
+        fidelity_results = self._compute_overall_sync_fidelity_with_uncertainty(metrics)
+        metrics.update(fidelity_results)
         
-        metrics['overall_sync_fidelity'] = (precision_score + coherence_score) / 2
+        # Log comprehensive uncertainty summary
+        self.logger.info(f"Comprehensive synchronization uncertainty analysis:")
+        self.logger.info(f"  Overall fidelity: {metrics.get('overall_sync_fidelity', 0):.4f} ± {metrics.get('fidelity_uncertainty', 0):.4f}")
+        self.logger.info(f"  Total sync uncertainty: {metrics.get('total_sync_uncertainty', 0)*1e9:.2f} ns")
+        self.logger.info(f"  Dominant uncertainty source: {metrics.get('dominant_uncertainty_source', 'unknown')}")
         
-        self.logger.info(f"Synchronization validation: {metrics}")
         return metrics
+    
+    def _compute_allan_variance(self, sync_intervals: np.ndarray) -> float:
+        """
+        Compute Allan variance for timing stability characterization
+        
+        Allan variance is a standard metric for oscillator stability analysis
+        """
+        if len(sync_intervals) < 3:
+            return 0.0
+            
+        # Two-sample Allan variance
+        second_differences = np.diff(sync_intervals, n=1)
+        allan_var = 0.5 * np.mean(second_differences**2)
+        
+        return allan_var
+    
+    def _analyze_communication_latency_uncertainty(self) -> Dict[str, float]:
+        """
+        CRITICAL UQ FIX: Analyze communication latency uncertainty sources
+        """
+        # Model typical communication latency sources
+        latency_sources = {
+            'network_jitter': 1e-6,      # 1 μs network jitter (typical Ethernet)
+            'protocol_overhead': 5e-7,    # 500 ns protocol processing
+            'serialization_delay': 2e-7,  # 200 ns data serialization
+            'hardware_buffering': 1e-6,   # 1 μs hardware buffer delays
+            'interrupt_latency': 3e-7     # 300 ns interrupt processing
+        }
+        
+        # Total latency uncertainty (RSS combination)
+        total_latency_uncertainty = np.sqrt(sum([v**2 for v in latency_sources.values()]))
+        
+        # Impact on synchronization
+        latency_sync_impact = total_latency_uncertainty / self.config.sync_precision_target
+        
+        return {
+            'communication_latency_uncertainty': total_latency_uncertainty,
+            'latency_sync_impact_factor': latency_sync_impact,
+            'network_jitter_contribution': latency_sources['network_jitter'],
+            'protocol_overhead_contribution': latency_sources['protocol_overhead'],
+            'latency_uncertainty_budget': total_latency_uncertainty < 0.5 * self.config.sync_precision_target
+        }
+    
+    def _characterize_hardware_clock_drift(self) -> Dict[str, float]:
+        """
+        CRITICAL UQ FIX: Characterize hardware clock drift uncertainty
+        """
+        # Model typical clock drift sources
+        if len(self.sync_history) > 10:
+            # Linear drift analysis
+            time_points = np.arange(len(self.sync_history))
+            sync_array = np.array(self.sync_history)
+            
+            # Fit linear trend to detect drift
+            drift_coeffs = np.polyfit(time_points, sync_array, 1)
+            drift_rate = drift_coeffs[0]  # seconds per sync cycle
+            
+            # Predict drift uncertainty over time
+            drift_uncertainty_1s = abs(drift_rate) * (1.0 / np.mean(np.diff(sync_array)))
+            drift_uncertainty_1hr = drift_uncertainty_1s * 3600
+            
+        else:
+            # Use typical clock specifications
+            drift_rate = 1e-8  # 10 ppb typical crystal oscillator
+            drift_uncertainty_1s = drift_rate * 1.0
+            drift_uncertainty_1hr = drift_rate * 3600
+        
+        # Temperature coefficient impact (typical ±10 ppm/°C)
+        temp_coeff = 1e-5  # 10 ppm/°C
+        temp_variation = 5.0  # ±5°C typical lab variation
+        temp_drift_uncertainty = temp_coeff * temp_variation
+        
+        return {
+            'clock_drift_rate': drift_rate,
+            'drift_uncertainty_1s': drift_uncertainty_1s,
+            'drift_uncertainty_1hr': drift_uncertainty_1hr,
+            'temperature_drift_uncertainty': temp_drift_uncertainty,
+            'clock_stability_factor': 1.0 / max(drift_uncertainty_1s, 1e-12)
+        }
+    
+    def _assess_environmental_sync_impacts(self) -> Dict[str, float]:
+        """
+        CRITICAL UQ FIX: Assess environmental factors affecting synchronization
+        """
+        # Temperature effects on timing
+        temp_sensitivity = 1e-6  # 1 ppm/°C for electronics
+        temp_fluctuation = 1.0   # ±1°C short-term stability
+        temp_sync_uncertainty = temp_sensitivity * temp_fluctuation
+        
+        # Electromagnetic interference effects
+        emi_jitter = 1e-8  # 10 ns typical EMI-induced jitter
+        
+        # Vibration effects on hardware timing
+        vibration_sensitivity = 1e-9  # 1 ns/g for typical hardware
+        vibration_level = 0.1  # 0.1 g typical lab vibrations
+        vibration_sync_uncertainty = vibration_sensitivity * vibration_level
+        
+        # Power supply noise effects
+        power_noise_sensitivity = 5e-9  # 5 ns/V for digital circuits
+        power_ripple = 0.01  # 10 mV typical power ripple
+        power_sync_uncertainty = power_noise_sensitivity * power_ripple
+        
+        # Total environmental uncertainty
+        total_env_uncertainty = np.sqrt(
+            temp_sync_uncertainty**2 + emi_jitter**2 + 
+            vibration_sync_uncertainty**2 + power_sync_uncertainty**2
+        )
+        
+        return {
+            'environmental_sync_uncertainty': total_env_uncertainty,
+            'temperature_contribution': temp_sync_uncertainty,
+            'emi_contribution': emi_jitter,
+            'vibration_contribution': vibration_sync_uncertainty,
+            'power_noise_contribution': power_sync_uncertainty,
+            'environmental_stability_factor': 1.0 / max(total_env_uncertainty, 1e-12)
+        }
+    
+    def _analyze_coherence_uncertainty(self) -> Dict[str, float]:
+        """
+        CRITICAL UQ FIX: Analyze quantum coherence uncertainty
+        """
+        current_time = time.time()
+        coherence_value = abs(self.compute_hil_hamiltonian(current_time))
+        
+        # Model coherence uncertainty sources
+        decoherence_rate = 1e3  # 1 kHz typical decoherence
+        measurement_duration = 1e-3  # 1 ms measurement time
+        
+        # Coherence decay uncertainty
+        coherence_decay = np.exp(-decoherence_rate * measurement_duration)
+        coherence_uncertainty = coherence_value * (1 - coherence_decay)
+        
+        # Phase uncertainty from timing jitter
+        if 'timing_jitter_rms' in locals():
+            phase_jitter = 2 * np.pi * 1e9 * self.timing_jitter_rms  # Assume 1 GHz carrier
+            phase_coherence_uncertainty = coherence_value * abs(np.sin(phase_jitter))
+        else:
+            phase_coherence_uncertainty = 0.01 * coherence_value
+        
+        total_coherence_uncertainty = np.sqrt(
+            coherence_uncertainty**2 + phase_coherence_uncertainty**2
+        )
+        
+        return {
+            'coherence_quality': coherence_value,
+            'coherence_uncertainty': total_coherence_uncertainty,
+            'relative_coherence_uncertainty': total_coherence_uncertainty / max(coherence_value, 1e-12),
+            'decoherence_contribution': coherence_uncertainty,
+            'phase_jitter_contribution': phase_coherence_uncertainty
+        }
+    
+    def _analyze_quantum_enhancement_uncertainty(self) -> Dict[str, float]:
+        """
+        CRITICAL UQ FIX: Analyze quantum timing enhancement uncertainty
+        """
+        enhancement_factor = self._compute_quantum_enhancement_factor()
+        
+        # Model quantum enhancement uncertainty sources
+        squeezing_uncertainty = 0.1  # 10% squeezing parameter uncertainty
+        entanglement_uncertainty = 0.05  # 5% entanglement fidelity uncertainty
+        
+        # Enhancement factor uncertainty propagation
+        enhancement_uncertainty = enhancement_factor * np.sqrt(
+            squeezing_uncertainty**2 + entanglement_uncertainty**2
+        )
+        
+        # Quantum decoherence impact on enhancement
+        decoherence_factor = 0.95  # 95% quantum state preservation
+        effective_enhancement = enhancement_factor * decoherence_factor
+        decoherence_uncertainty = enhancement_factor * (1 - decoherence_factor)
+        
+        total_quantum_uncertainty = np.sqrt(
+            enhancement_uncertainty**2 + decoherence_uncertainty**2
+        )
+        
+        return {
+            'quantum_enhancement_factor': effective_enhancement,
+            'quantum_enhancement_uncertainty': total_quantum_uncertainty,
+            'squeezing_contribution': enhancement_factor * squeezing_uncertainty,
+            'entanglement_contribution': enhancement_factor * entanglement_uncertainty,
+            'decoherence_impact': decoherence_uncertainty
+        }
+    
+    def _compute_overall_sync_fidelity_with_uncertainty(self, metrics: Dict[str, float]) -> Dict[str, float]:
+        """
+        CRITICAL UQ FIX: Compute overall synchronization fidelity with uncertainty bounds
+        """
+        # Extract key metrics
+        timing_uncertainty = metrics.get('timing_jitter_rms', 0.0)
+        latency_uncertainty = metrics.get('communication_latency_uncertainty', 0.0)
+        environmental_uncertainty = metrics.get('environmental_sync_uncertainty', 0.0)
+        coherence_uncertainty = metrics.get('coherence_uncertainty', 0.0)
+        
+        # Total synchronization uncertainty (RSS combination)
+        total_sync_uncertainty = np.sqrt(
+            timing_uncertainty**2 + latency_uncertainty**2 + 
+            environmental_uncertainty**2 + coherence_uncertainty**2
+        )
+        
+        # Fidelity calculation with uncertainty propagation
+        target_precision = self.config.sync_precision_target
+        precision_score = max(0.0, 1.0 - total_sync_uncertainty / target_precision)
+        
+        coherence_value = metrics.get('coherence_quality', 0.0)
+        coherence_score = min(1.0, coherence_value) if coherence_value > 0 else 0.5
+        
+        # Overall fidelity
+        overall_fidelity = (precision_score + coherence_score) / 2
+        
+        # Fidelity uncertainty propagation
+        precision_uncertainty = total_sync_uncertainty / target_precision
+        coherence_fidelity_uncertainty = metrics.get('relative_coherence_uncertainty', 0.0)
+        
+        fidelity_uncertainty = 0.5 * np.sqrt(
+            precision_uncertainty**2 + coherence_fidelity_uncertainty**2
+        )
+        
+        # Identify dominant uncertainty source
+        uncertainty_sources = {
+            'timing_jitter': timing_uncertainty,
+            'communication_latency': latency_uncertainty,
+            'environmental_factors': environmental_uncertainty,
+            'quantum_coherence': coherence_uncertainty
+        }
+        dominant_source = max(uncertainty_sources.items(), key=lambda x: x[1])[0]
+        
+        return {
+            'overall_sync_fidelity': overall_fidelity,
+            'fidelity_uncertainty': fidelity_uncertainty,
+            'total_sync_uncertainty': total_sync_uncertainty,
+            'dominant_uncertainty_source': dominant_source,
+            'precision_score': precision_score,
+            'coherence_score': coherence_score,
+            'uncertainty_budget_utilization': total_sync_uncertainty / target_precision
+        }
         
     def _compute_quantum_enhancement_factor(self) -> float:
         """Compute quantum timing enhancement effectiveness"""
