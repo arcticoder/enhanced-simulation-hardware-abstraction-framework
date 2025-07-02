@@ -50,9 +50,9 @@ def test_individual_enhancements():
     # Test 1: Digital Twin Framework
     print("\n1. Testing Digital Twin Framework (5×5 Correlation Matrix)")
     try:
-        from digital_twin.enhanced_correlation_matrix import EnhancedCorrelationMatrix, CorrelationConfig
+        from digital_twin.enhanced_correlation_matrix import EnhancedCorrelationMatrix, CorrelationMatrixConfig
         
-        config = CorrelationConfig()
+        config = CorrelationMatrixConfig()
         digital_twin = EnhancedCorrelationMatrix(config)
         
         # Test correlation matrix generation

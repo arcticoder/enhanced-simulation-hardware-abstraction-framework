@@ -21,7 +21,7 @@ import time
 import json
 
 # Import all enhancement modules
-from src.digital_twin.enhanced_correlation_matrix import EnhancedCorrelationMatrix, CorrelationConfig
+from src.digital_twin.enhanced_correlation_matrix import EnhancedCorrelationMatrix, CorrelationMatrixConfig
 from src.metamaterial_fusion.enhanced_metamaterial_amplification import EnhancedMetamaterialAmplification, MetamaterialConfig
 from src.multi_physics.enhanced_multi_physics_coupling import EnhancedMultiPhysicsCoupling, MultiPhysicsConfig
 from src.hardware_abstraction.enhanced_precision_measurement import EnhancedPrecisionMeasurementSimulator, PrecisionMeasurementConfig
@@ -40,7 +40,7 @@ class IntegratedEnhancementConfig:
     statistical_enhancement_target: float = 200.0  # 200×
     
     # Digital Twin Configuration
-    correlation_config: Optional[CorrelationConfig] = None
+    correlation_config: Optional[CorrelationMatrixConfig] = None
     
     # Metamaterial Configuration  
     metamaterial_config: Optional[MetamaterialConfig] = None
@@ -91,7 +91,7 @@ class IntegratedEnhancementFramework:
         """Initialize all 5 enhancement modules with their configurations"""
         
         # Enhancement 1: Digital Twin Framework
-        correlation_config = self.config.correlation_config or CorrelationConfig()
+        correlation_config = self.config.correlation_config or CorrelationMatrixConfig()
         self.digital_twin = EnhancedCorrelationMatrix(correlation_config)
         self.logger.info("✓ Enhancement 1: Digital Twin Framework initialized")
         

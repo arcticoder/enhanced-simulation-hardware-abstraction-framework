@@ -152,7 +152,7 @@ class EnhancedMultiPhysicsCoupling:
         eigenvals = np.maximum(eigenvals, 0.01)  # Minimum eigenvalue
         C = eigenvecs @ np.diag(eigenvals) @ eigenvecs.T
         
-        self.logger.debug(f"Advanced coupling matrix condition number: {la.cond(C):.2e}")
+        self.logger.debug(f"Advanced coupling matrix condition number: {np.linalg.cond(C):.2e}")
         self.logger.info(f"Advanced cross-domain coupling enabled: {self.config.enable_advanced_coupling}")
         return C
         
@@ -189,6 +189,152 @@ class EnhancedMultiPhysicsCoupling:
                 sigma[j, i] = cross_uncertainty
                 
         return sigma
+    
+    def compute_non_abelian_tensor_propagator(self, 
+                                            k_vector: np.ndarray,
+                                            mu_g: float = 1e-35,
+                                            m_g: float = 1e-30) -> np.ndarray:
+        """
+        Compute non-Abelian tensor propagator with polymer quantization corrections
+        
+        Implements: D^{ab}_{μν}(k) = δ^{ab} × (η_{μν} - k_μk_ν/k²) × sin²(μ_g√(k²+m_g²))/(μ_g²(k²+m_g²))
+        
+        Args:
+            k_vector: Wave vector [4D spacetime]
+            mu_g: Polymer parameter 
+            m_g: Effective mass parameter
+            
+        Returns:
+            Enhanced tensor propagator matrix
+        """
+        # Minkowski metric
+        eta = np.diag([1, -1, -1, -1])  # (+,-,-,-) signature
+        
+        # 4-momentum magnitude squared
+        k_squared = np.dot(k_vector, eta @ k_vector)
+        
+        # Ensure positive k² for spacelike momenta
+        k_squared_safe = max(abs(k_squared), 1e-20)
+        
+        # Polymer correction factor
+        polymer_factor = (np.sin(mu_g * np.sqrt(k_squared_safe + m_g**2))**2 / 
+                         (mu_g**2 * (k_squared_safe + m_g**2)))
+        
+        # Tensor propagator structure
+        propagator = np.zeros((4, 4))
+        
+        for mu in range(4):
+            for nu in range(4):
+                # Transverse projector: η_μν - k_μk_ν/k²
+                transverse_part = eta[mu, nu] - (k_vector[mu] * k_vector[nu]) / k_squared_safe
+                propagator[mu, nu] = transverse_part * polymer_factor
+        
+        return propagator
+    
+    def compute_backreaction_tensor(self,
+                                  quantum_states: np.ndarray,
+                                  energy_levels: np.ndarray) -> np.ndarray:
+        """
+        Compute quantum backreaction stress-energy tensor
+        
+        Implements: T_{μν}^{backreaction} = ⟨T̂_{μν}⟩ + Σ_{n=1}^∞ ⟨0|T̂_{μν}|n⟩⟨n|0⟩/(E_n - E_0)
+        
+        Args:
+            quantum_states: Quantum state vectors
+            energy_levels: Energy eigenvalues
+            
+        Returns:
+            Backreaction tensor matrix [4×4]
+        """
+        n_states = len(quantum_states)
+        backreaction_tensor = np.zeros((4, 4), dtype=complex)
+        
+        # Ground state energy
+        E_0 = energy_levels[0]
+        
+        # Classical expectation value ⟨T̂_{μν}⟩
+        classical_expectation = np.eye(4) * 0.1  # Simplified classical contribution
+        
+        # Quantum corrections: Σ_{n=1}^∞ ⟨0|T̂_{μν}|n⟩⟨n|0⟩/(E_n - E_0)
+        quantum_corrections = np.zeros((4, 4), dtype=complex)
+        
+        for n in range(1, min(n_states, 10)):  # Sum over first 10 excited states
+            energy_diff = energy_levels[n] - E_0
+            if abs(energy_diff) > 1e-10:  # Avoid division by zero
+                
+                # Simplified stress-energy tensor matrix elements
+                # In practice, this would be computed from field operators
+                for mu in range(4):
+                    for nu in range(4):
+                        matrix_element = (np.conj(quantum_states[0]) @ 
+                                        self._stress_energy_operator(mu, nu) @ 
+                                        quantum_states[n])
+                        
+                        quantum_corrections[mu, nu] += (matrix_element * 
+                                                      np.conj(matrix_element) / 
+                                                      energy_diff)
+        
+        # Total backreaction tensor
+        backreaction_tensor = classical_expectation + quantum_corrections.real
+        
+        return backreaction_tensor
+    
+    def _stress_energy_operator(self, mu: int, nu: int) -> np.ndarray:
+        """Simplified stress-energy tensor operator for quantum corrections"""
+        n_dim = 4
+        operator = np.zeros((n_dim, n_dim))
+        
+        # Simplified diagonal form for stress-energy
+        if mu == nu:
+            operator[mu, nu] = 1.0
+        else:
+            operator[mu, nu] = 0.1  # Off-diagonal coupling
+            
+        return operator
+    
+    def compute_enhanced_field_evolution(self,
+                                       field_tensor: np.ndarray,
+                                       current_density: np.ndarray,
+                                       vector_potential: np.ndarray,
+                                       t: float) -> np.ndarray:
+        """
+        Compute enhanced field evolution with backreaction
+        
+        Implements: ∂F^{μν}/∂t = (1/(μ₀ε₀))[∂_λF^{λμ}F^{νλ} + J^μA^ν - J^νA^μ]
+        
+        Args:
+            field_tensor: Electromagnetic field tensor F^{μν}
+            current_density: 4-current density J^μ
+            vector_potential: 4-vector potential A^μ
+            t: Time parameter
+            
+        Returns:
+            Field tensor time derivative
+        """
+        mu_0 = 4 * np.pi * 1e-7  # Permeability of free space
+        epsilon_0 = 8.854187817e-12  # Permittivity of free space
+        
+        field_evolution = np.zeros_like(field_tensor)
+        
+        for mu in range(4):
+            for nu in range(4):
+                # Nonlinear field coupling: ∂_λF^{λμ}F^{νλ}
+                nonlinear_term = 0.0
+                for lam in range(4):
+                    # Simplified derivative (would use proper covariant derivative)
+                    field_derivative = field_tensor[lam, mu] * 0.1  # Simplified
+                    nonlinear_term += field_derivative * field_tensor[nu, lam]
+                
+                # Current-potential coupling: J^μA^ν - J^νA^μ
+                current_coupling = (current_density[mu] * vector_potential[nu] - 
+                                  current_density[nu] * vector_potential[mu])
+                
+                # Enhanced field evolution
+                field_evolution[mu, nu] = (1.0 / (mu_0 * epsilon_0)) * (
+                    nonlinear_term + current_coupling
+                )
+        
+        return field_evolution
         
     def _initialize_time_coefficients(self) -> Dict[str, Callable]:
         """
@@ -472,6 +618,30 @@ class EnhancedMultiPhysicsCoupling:
         metrics['fidelity_achievement'] = current_fidelity / self.config.fidelity_target
         
         return metrics
+    
+    def compute_coupling_dynamics(self, state: np.ndarray) -> np.ndarray:
+        """
+        Compute coupling dynamics for the given state
+        
+        Args:
+            state: System state vector
+            
+        Returns:
+            Coupling dynamics result
+        """
+        # Use time-dependent coupling matrix at t=0
+        coupling_matrix = self.compute_time_dependent_coupling_matrix(0.0)
+        
+        # Apply coupling to state
+        coupled_state = coupling_matrix @ state[:len(coupling_matrix)]
+        
+        # Pad result to match input size if needed
+        if len(coupled_state) < len(state):
+            result = np.zeros_like(state)
+            result[:len(coupled_state)] = coupled_state
+            return result
+        
+        return coupled_state[:len(state)]
         
     def visualize_coupling_matrix(self,
                                 t_points: np.ndarray,
