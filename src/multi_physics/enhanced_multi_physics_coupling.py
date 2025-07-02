@@ -46,6 +46,13 @@ class MultiPhysicsConfig:
     time_dependence_frequency: float = 1.0  # Hz
     correlation_matrix_size: int = 5  # 5×5 correlation matrices
     fidelity_target: float = 0.995
+    # Advanced cross-domain coupling parameters
+    enable_advanced_coupling: bool = True
+    thermal_mechanical_coupling: float = 0.15  # C_tm coefficient
+    electromagnetic_mechanical_coupling: float = 0.08  # C_em coefficient  
+    quantum_mechanical_coupling: float = 0.05  # C_qm coefficient
+    quantum_thermal_coupling: float = 0.12  # C_qt coefficient
+    quantum_electromagnetic_coupling: float = 0.1  # C_qem coefficient
     
 class EnhancedMultiPhysicsCoupling:
     """
@@ -80,7 +87,8 @@ class EnhancedMultiPhysicsCoupling:
         
     def _initialize_base_coupling_matrix(self) -> np.ndarray:
         """
-        Initialize base coupling matrix C_enhanced
+        Initialize base coupling matrix C_enhanced with advanced cross-domain coupling
+        Implements: dx/dt = v_mech + C_tm × dT/dt + C_em × E_field + C_qm × ψ_quantum
         
         Returns:
             Base coupling matrix (5×5)
@@ -88,26 +96,49 @@ class EnhancedMultiPhysicsCoupling:
         # Create symmetric coupling matrix
         C = np.eye(self.n_domains, dtype=np.float64)
         
-        # Cross-coupling terms based on physical interactions
-        coupling_patterns = {
-            # Mechanical-Thermal coupling (thermal expansion, heat generation)
-            (PhysicsDomain.MECHANICAL, PhysicsDomain.THERMAL): 0.15,
-            # Mechanical-Electromagnetic coupling (piezoelectric, magnetostrictive)
-            (PhysicsDomain.MECHANICAL, PhysicsDomain.ELECTROMAGNETIC): 0.08,
-            # Mechanical-Quantum coupling (strain-induced band gap changes)
-            (PhysicsDomain.MECHANICAL, PhysicsDomain.QUANTUM): 0.05,
-            # Thermal-Electromagnetic coupling (temperature-dependent permittivity)
-            (PhysicsDomain.THERMAL, PhysicsDomain.ELECTROMAGNETIC): 0.12,
-            # Thermal-Quantum coupling (thermal decoherence)
-            (PhysicsDomain.THERMAL, PhysicsDomain.QUANTUM): 0.18,
-            # Electromagnetic-Quantum coupling (field-matter interaction)
-            (PhysicsDomain.ELECTROMAGNETIC, PhysicsDomain.QUANTUM): 0.25,
-            # Control coupling with all domains
-            (PhysicsDomain.CONTROL, PhysicsDomain.MECHANICAL): 0.20,
-            (PhysicsDomain.CONTROL, PhysicsDomain.THERMAL): 0.15,
-            (PhysicsDomain.CONTROL, PhysicsDomain.ELECTROMAGNETIC): 0.30,
-            (PhysicsDomain.CONTROL, PhysicsDomain.QUANTUM): 0.35,
-        }
+        # Enhanced cross-coupling terms from casimir-environmental-enclosure-platform
+        if self.config.enable_advanced_coupling:
+            coupling_patterns = {
+                # Advanced mechanical coupling equations
+                # dx/dt = v_mech + C_tm × dT/dt + C_em × E_field + C_qm × ψ_quantum
+                (PhysicsDomain.MECHANICAL, PhysicsDomain.THERMAL): self.config.thermal_mechanical_coupling,
+                (PhysicsDomain.MECHANICAL, PhysicsDomain.ELECTROMAGNETIC): self.config.electromagnetic_mechanical_coupling,
+                (PhysicsDomain.MECHANICAL, PhysicsDomain.QUANTUM): self.config.quantum_mechanical_coupling,
+                
+                # Advanced velocity coupling
+                # dv/dt = (F_total - c×v - k×x)/m + ξ_thermal + ξ_em + ξ_quantum
+                (PhysicsDomain.THERMAL, PhysicsDomain.MECHANICAL): 0.12,  # thermal noise coupling
+                (PhysicsDomain.ELECTROMAGNETIC, PhysicsDomain.MECHANICAL): 0.1,  # EM force coupling
+                (PhysicsDomain.QUANTUM, PhysicsDomain.MECHANICAL): 0.08,  # quantum noise coupling
+                
+                # Advanced thermal coupling
+                # dT/dt = (Q_gen - h×A×(T - T_amb))/(ρ×c_p×V) + coupling_mechanical + coupling_em
+                (PhysicsDomain.THERMAL, PhysicsDomain.ELECTROMAGNETIC): 0.16,  # Joule heating
+                (PhysicsDomain.THERMAL, PhysicsDomain.QUANTUM): self.config.quantum_thermal_coupling,
+                
+                # Enhanced electromagnetic-quantum coupling
+                (PhysicsDomain.ELECTROMAGNETIC, PhysicsDomain.QUANTUM): self.config.quantum_electromagnetic_coupling,
+                
+                # Control coupling with all domains
+                (PhysicsDomain.CONTROL, PhysicsDomain.MECHANICAL): 0.20,
+                (PhysicsDomain.CONTROL, PhysicsDomain.THERMAL): 0.15,
+                (PhysicsDomain.CONTROL, PhysicsDomain.ELECTROMAGNETIC): 0.30,
+                (PhysicsDomain.CONTROL, PhysicsDomain.QUANTUM): 0.35,
+            }
+        else:
+            # Standard coupling terms
+            coupling_patterns = {
+                (PhysicsDomain.MECHANICAL, PhysicsDomain.THERMAL): 0.15,
+                (PhysicsDomain.MECHANICAL, PhysicsDomain.ELECTROMAGNETIC): 0.08,
+                (PhysicsDomain.MECHANICAL, PhysicsDomain.QUANTUM): 0.05,
+                (PhysicsDomain.THERMAL, PhysicsDomain.ELECTROMAGNETIC): 0.12,
+                (PhysicsDomain.THERMAL, PhysicsDomain.QUANTUM): 0.18,
+                (PhysicsDomain.ELECTROMAGNETIC, PhysicsDomain.QUANTUM): 0.25,
+                (PhysicsDomain.CONTROL, PhysicsDomain.MECHANICAL): 0.20,
+                (PhysicsDomain.CONTROL, PhysicsDomain.THERMAL): 0.15,
+                (PhysicsDomain.CONTROL, PhysicsDomain.ELECTROMAGNETIC): 0.30,
+                (PhysicsDomain.CONTROL, PhysicsDomain.QUANTUM): 0.35,
+            }
         
         # Fill coupling matrix
         for (domain1, domain2), strength in coupling_patterns.items():
@@ -121,7 +152,8 @@ class EnhancedMultiPhysicsCoupling:
         eigenvals = np.maximum(eigenvals, 0.01)  # Minimum eigenvalue
         C = eigenvecs @ np.diag(eigenvals) @ eigenvecs.T
         
-        self.logger.debug(f"Base coupling matrix condition number: {la.cond(C):.2e}")
+        self.logger.debug(f"Advanced coupling matrix condition number: {la.cond(C):.2e}")
+        self.logger.info(f"Advanced cross-domain coupling enabled: {self.config.enable_advanced_coupling}")
         return C
         
     def _initialize_cross_domain_uncertainty_matrix(self) -> np.ndarray:

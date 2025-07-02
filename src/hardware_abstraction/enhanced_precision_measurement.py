@@ -36,6 +36,11 @@ class PrecisionMeasurementConfig:
     quantum_efficiency: float = 0.99
     temperature: float = 4.2  # Kelvin (cryogenic)
     
+    # Enhanced precision specifications from casimir-anti-stiction-metasurface-coatings
+    sensor_precision: float = 0.06e-12  # 0.06 pm/√Hz target precision
+    thermal_uncertainty: float = 5e-9   # 5 nm thermal uncertainty
+    vibration_isolation: float = 9.7e11 # 9.7×10¹¹× vibration isolation factor
+    
     # Quantum enhancement parameters
     use_quantum_squeezing: bool = True
     squeezing_parameter: float = 10.0  # dB
@@ -327,20 +332,38 @@ class EnhancedPrecisionMeasurementSimulator:
             corrected_measurements = self._apply_error_correction(measurements)
             measurements = corrected_measurements
             
-        # Compute precision metrics
+        # Compute precision metrics with target specifications
         measurement_precision = np.std(measurements) / np.sqrt(n_measurements)
         
-        # Heisenberg limit comparison
+        # Apply enhanced precision targeting 0.06 pm/√Hz from config
+        target_precision = self.config.sensor_precision  # 0.06 pm/√Hz
+        thermal_noise = self.config.thermal_uncertainty * np.sqrt(np.mean(np.abs(parameter_values)))
+        vibration_suppression = self.config.vibration_isolation
+        
+        # Enhanced precision calculation
+        enhanced_precision = np.sqrt(
+            measurement_precision**2 + 
+            (thermal_noise / vibration_suppression)**2
+        )
+        
+        # Heisenberg limit comparison with target precision
         standard_quantum_limit = np.sqrt(HBAR / (2 * n_measurements))
         heisenberg_limit = np.sqrt(HBAR / (4 * n_measurements))  # With squeezing
         
-        enhancement_factor = standard_quantum_limit / measurement_precision
+        # Check if we achieve target precision
+        precision_achievement = target_precision / enhanced_precision
+        enhancement_factor = standard_quantum_limit / enhanced_precision
         
         results = {
             'measurements': measurements,
             'expectation_value': expectation_value,
             'variance': variance,
             'precision': measurement_precision,
+            'enhanced_precision': enhanced_precision,
+            'target_precision': target_precision,
+            'precision_achievement': precision_achievement,
+            'thermal_noise': thermal_noise,
+            'vibration_suppression': vibration_suppression,
             'standard_quantum_limit': standard_quantum_limit,
             'heisenberg_limit': heisenberg_limit,
             'enhancement_factor': enhancement_factor,
