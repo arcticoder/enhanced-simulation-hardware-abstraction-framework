@@ -728,6 +728,23 @@ def create_enhanced_simulation_framework(config: Optional[FrameworkConfig] = Non
     """
     return EnhancedSimulationFramework(config)
 
+def create_warp_field_coils_integration(framework: EnhancedSimulationFramework) -> 'WarpFieldCoilsIntegration':
+    """
+    Factory function to create Warp Field Coils Integration
+    
+    Args:
+        framework: Base Enhanced Simulation Framework
+        
+    Returns:
+        Configured Warp Field Coils Integration
+    """
+    try:
+        from .warp_field_coils_integration import WarpFieldCoilsIntegration
+        return WarpFieldCoilsIntegration(framework)
+    except ImportError:
+        logging.warning("Warp Field Coils Integration module not available")
+        return None
+
 if __name__ == "__main__":
     # Example complete framework usage
     logging.basicConfig(level=logging.INFO)
@@ -737,6 +754,15 @@ if __name__ == "__main__":
     
     # Initialize digital twin
     framework.initialize_digital_twin()
+    
+    # Create warp field coils integration if available
+    warp_integration = create_warp_field_coils_integration(framework)
+    if warp_integration:
+        print("\n🚀 Warp Field Coils Integration Active!")
+        warp_integration.initialize_components()
+        warp_metrics = warp_integration.compute_integrated_performance()
+        print(f"Polymer Stress-Energy Reduction: {warp_metrics['polymer_stress_energy_reduction']:.2%}")
+        print(f"Backreaction Control Factor: {warp_metrics['backreaction_control_factor']:.6f}")
     
     # Run enhanced simulation
     results = framework.run_enhanced_simulation()
