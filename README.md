@@ -1,5 +1,15 @@
 # Enhanced Simulation Hardware Abstraction Framework
 
+## Related Repositories
+
+- [energy](https://github.com/arcticoder/energy): Central meta-repo for all energy and simulation research. This framework provides core simulation infrastructure for the entire ecosystem.
+- [warp-field-coils](https://github.com/arcticoder/warp-field-coils): Primary integration for hardware-in-the-loop synchronization with field generation arrays.
+- [casimir-nanopositioning-platform](https://github.com/arcticoder/casimir-nanopositioning-platform): Shares digital twin infrastructure and 20×20 correlation matrix validation.
+- [unified-lqg](https://github.com/arcticoder/unified-lqg): Provides quantum geometry framework for advanced physics simulations.
+- [negative-energy-generator](https://github.com/arcticoder/negative-energy-generator): Uses enhanced simulation framework for digital twin negative energy generation.
+
+All repositories are part of the [arcticoder](https://github.com/arcticoder) ecosystem and link back to the energy framework for unified documentation and integration.
+
 A revolutionary physics simulation framework achieving quantum-limited precision measurements with comprehensive uncertainty quantification. This framework integrates advanced digital twin capabilities, multi-physics coupling, and hardware-in-the-loop synchronization to deliver unprecedented accuracy in theoretical physics simulations.
 
 ## 🎯 Key Achievements
