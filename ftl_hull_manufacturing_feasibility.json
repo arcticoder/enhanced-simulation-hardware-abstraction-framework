@@ -1,0 +1,1101 @@
+{
+  "framework_info": {
+    "name": "Advanced Nanolattice Manufacturing Feasibility Assessment Framework",
+    "version": "1.0.0",
+    "purpose": "FTL Hull Manufacturing Feasibility Analysis",
+    "graviton_ecosystem_integration": true,
+    "compliance": "Medical-grade manufacturing protocols"
+  },
+  "manufacturing_assessment": {
+    "small_probe": {
+      "comprehensive_manufacturing_assessment": {
+        "assessment_info": {
+          "vessel_type": "small_probe",
+          "assessment_date": "2025-07-11T19:47:06.257005",
+          "hull_specifications": {
+            "dimensions": [
+              15,
+              3,
+              2
+            ],
+            "strut_diameter": 300,
+            "production_timeline": 180,
+            "budget": 50000000.0,
+            "quality": "QualityStandard.MEDICAL_GRADE"
+          },
+          "graviton_ecosystem_integration": true
+        },
+        "individual_analyses": {
+          "nanofabrication": {
+            "nanofabrication_analysis": {
+              "target_strut_diameter_nm": 300,
+              "structure_type": "plate_nanolattice",
+              "feasible_technologies": [
+                {
+                  "technology": "atomic_layer_deposition",
+                  "resolution_adequate": true,
+                  "quality_adequate": true,
+                  "defect_acceptable": true,
+                  "feasibility_score": 1.0,
+                  "scalability_score": 0.4,
+                  "overall_score": 0.82,
+                  "process_details": "ManufacturingProcess(technology=<ManufacturingTechnology.ATOMIC_LAYER_DEPOSITION: 'atomic_layer_deposition'>, resolution=1, throughput=10, defect_rate=0.001, setup_time=10, operational_cost=1500, equipment_cost=12000000.0, quality_achievable=<QualityStandard.FTL_GRADE: 'ftl_grade'>, scalability_factor=0.4)",
+                  "complexity_adjusted_score": 0.727012
+                },
+                {
+                  "technology": "focused_ion_beam",
+                  "resolution_adequate": true,
+                  "quality_adequate": true,
+                  "defect_acceptable": true,
+                  "feasibility_score": 1.0,
+                  "scalability_score": 0.3,
+                  "overall_score": 0.7899999999999999,
+                  "process_details": "ManufacturingProcess(technology=<ManufacturingTechnology.FOCUSED_ION_BEAM: 'focused_ion_beam'>, resolution=5, throughput=5, defect_rate=0.005, setup_time=8, operational_cost=1200, equipment_cost=8000000.0, quality_achievable=<QualityStandard.FTL_GRADE: 'ftl_grade'>, scalability_factor=0.3)",
+                  "complexity_adjusted_score": 0.700414
+                },
+                {
+                  "technology": "molecular_beam_epitaxy",
+                  "resolution_adequate": true,
+                  "quality_adequate": true,
+                  "defect_acceptable": true,
+                  "feasibility_score": 1.0,
+                  "scalability_score": 0.2,
+                  "overall_score": 0.76,
+                  "process_details": "ManufacturingProcess(technology=<ManufacturingTechnology.MOLECULAR_BEAM_EPITAXY: 'molecular_beam_epitaxy'>, resolution=0.5, throughput=2, defect_rate=0.0005, setup_time=12, operational_cost=2000, equipment_cost=15000000.0, quality_achievable=<QualityStandard.FTL_GRADE: 'ftl_grade'>, scalability_factor=0.2)",
+                  "complexity_adjusted_score": 0.6738160000000001
+                },
+                {
+                  "technology": "two_photon_lithography",
+                  "resolution_adequate": true,
+                  "quality_adequate": true,
+                  "defect_acceptable": false,
+                  "feasibility_score": 0.7,
+                  "scalability_score": 0.8,
+                  "overall_score": 0.6579999999999999,
+                  "process_details": "ManufacturingProcess(technology=<ManufacturingTechnology.TWO_PHOTON_LITHOGRAPHY: 'two_photon_lithography'>, resolution=100, throughput=50, defect_rate=0.02, setup_time=4, operational_cost=500, equipment_cost=2000000.0, quality_achievable=<QualityStandard.MEDICAL_GRADE: 'medical_grade'>, scalability_factor=0.8)",
+                  "complexity_adjusted_score": 0.5833828
+                },
+                {
+                  "technology": "electron_beam_lithography",
+                  "resolution_adequate": true,
+                  "quality_adequate": true,
+                  "defect_acceptable": false,
+                  "feasibility_score": 0.7,
+                  "scalability_score": 0.6,
+                  "overall_score": 0.6159999999999999,
+                  "process_details": "ManufacturingProcess(technology=<ManufacturingTechnology.ELECTRON_BEAM_LITHOGRAPHY: 'electron_beam_lithography'>, resolution=10, throughput=20, defect_rate=0.01, setup_time=6, operational_cost=800, equipment_cost=5000000.0, quality_achievable=<QualityStandard.FTL_GRADE: 'ftl_grade'>, scalability_factor=0.6)",
+                  "complexity_adjusted_score": 0.5461455999999999
+                }
+              ],
+              "best_technology": {
+                "technology": "atomic_layer_deposition",
+                "resolution_adequate": true,
+                "quality_adequate": true,
+                "defect_acceptable": true,
+                "feasibility_score": 1.0,
+                "scalability_score": 0.4,
+                "overall_score": 0.82,
+                "process_details": "ManufacturingProcess(technology=<ManufacturingTechnology.ATOMIC_LAYER_DEPOSITION: 'atomic_layer_deposition'>, resolution=1, throughput=10, defect_rate=0.001, setup_time=10, operational_cost=1500, equipment_cost=12000000.0, quality_achievable=<QualityStandard.FTL_GRADE: 'ftl_grade'>, scalability_factor=0.4)",
+                "complexity_adjusted_score": 0.727012
+              },
+              "structure_complexity_factors": {
+                "geometric_complexity": 0.7,
+                "assembly_difficulty": 0.6,
+                "quality_criticality": 0.9
+              },
+              "manufacturing_recommendations": [
+                "Good manufacturing capability - minor process optimization recommended",
+                "Primary recommendation: atomic_layer_deposition",
+                "Backup technology: focused_ion_beam"
+              ]
+            }
+          },
+          "scale_up": {
+            "scale_up_analysis": {
+              "scale_factors": {
+                "lab_dimensions_m": [
+                  0.001,
+                  0.001,
+                  0.001
+                ],
+                "vessel_dimensions_m": [
+                  15,
+                  3,
+                  2
+                ],
+                "volume_scale_factor": 90000000000.0,
+                "max_linear_scale": 15000.0
+              },
+              "manufacturing_scaling": {
+                "equipment_requirements": {
+                  "parallel_processing_units": 90000000,
+                  "coordination_complexity": 122.47448713915891,
+                  "quality_assurance_stations": 180000000,
+                  "assembly_automation_level": 0.40954242509439326
+                },
+                "fabrication_time_hours": 15518.45573915358,
+                "quality_control_time_hours": 35115411.90034651,
+                "assembly_time_hours": 20527662.86755894,
+                "total_production_time_hours": 55658593.22364461
+              },
+              "cost_analysis": {
+                "material_cost_usd": 2.7e+16,
+                "equipment_cost_usd": 7474385637693.1,
+                "labor_cost_usd": 15780425937.780882,
+                "total_cost_usd": 2.7007490166063628e+16
+              },
+              "risk_assessment": {
+                "individual_risks": {
+                  "dimensional_accuracy_degradation": 0.5,
+                  "defect_propagation_risk": 0.3,
+                  "assembly_tolerance_accumulation": 0.4,
+                  "quality_control_complexity": 0.6,
+                  "production_timeline_risk": 0.5
+                },
+                "overall_risk_score": 0.4600000000000001,
+                "risk_level": "HIGH"
+              },
+              "feasibility_assessment": {
+                "criteria": {
+                  "time_feasible": "False",
+                  "cost_feasible": "False",
+                  "risk_acceptable": "False",
+                  "technical_achievable": true
+                },
+                "overall_feasible": false,
+                "critical_constraints": [
+                  "time_feasible",
+                  "cost_feasible",
+                  "risk_acceptable"
+                ]
+              },
+              "golden_ratio_optimization": {
+                "enhancement_factor": 196.38699100999082,
+                "optimized_time_hours": 55549501.229658626,
+                "optimized_cost_usd": 2.695455492670294e+16,
+                "optimized_risk_score": 0.459098390485151,
+                "optimization_benefit": "0.2% time reduction"
+              }
+            }
+          },
+          "timeline": {
+            "production_timeline_analysis": {
+              "hull_requirements": {
+                "dimensions_m": [
+                  15,
+                  3,
+                  2
+                ],
+                "total_volume_m3": "90",
+                "target_timeline_days": 180,
+                "quality_standard": "medical_grade"
+              },
+              "manufacturing_breakdown": {
+                "segments_needed": 225,
+                "segment_size_m": [
+                  2,
+                  2,
+                  0.1
+                ],
+                "selected_technology": "atomic_layer_deposition",
+                "phases": {
+                  "design_and_simulation": {
+                    "duration_days": 30,
+                    "parallel_possible": false,
+                    "critical_path": true,
+                    "resources_required": [
+                      "design_team",
+                      "simulation_cluster"
+                    ]
+                  },
+                  "equipment_setup": {
+                    "duration_days": 60,
+                    "parallel_possible": true,
+                    "critical_path": true,
+                    "resources_required": [
+                      "manufacturing_equipment",
+                      "facility_preparation"
+                    ]
+                  },
+                  "material_preparation": {
+                    "duration_days": 14,
+                    "parallel_possible": true,
+                    "critical_path": false,
+                    "resources_required": [
+                      "raw_materials",
+                      "purification_systems"
+                    ]
+                  },
+                  "nanofabrication": {
+                    "duration_days": 22.5,
+                    "parallel_possible": true,
+                    "critical_path": true,
+                    "resources_required": [
+                      "fabrication_equipment",
+                      "operators"
+                    ]
+                  },
+                  "quality_inspection": {
+                    "duration_days": 450,
+                    "parallel_possible": true,
+                    "critical_path": true,
+                    "resources_required": [
+                      "inspection_equipment",
+                      "quality_team"
+                    ]
+                  },
+                  "assembly": {
+                    "duration_days": 337.5,
+                    "parallel_possible": false,
+                    "critical_path": true,
+                    "resources_required": [
+                      "assembly_robots",
+                      "precision_tooling"
+                    ]
+                  },
+                  "final_validation": {
+                    "duration_days": 21,
+                    "parallel_possible": false,
+                    "critical_path": true,
+                    "resources_required": [
+                      "test_facilities",
+                      "validation_team"
+                    ]
+                  },
+                  "documentation": {
+                    "duration_days": 14,
+                    "parallel_possible": true,
+                    "critical_path": false,
+                    "resources_required": [
+                      "documentation_team",
+                      "certification_body"
+                    ]
+                  }
+                }
+              },
+              "timeline_results": {
+                "baseline_duration_days": 838.5,
+                "risk_adjusted_duration_days": 1111.0125,
+                "timeline_feasible": false,
+                "timeline_margin_days": -931.0125,
+                "critical_path_phases": [
+                  "design_and_simulation",
+                  "equipment_setup",
+                  "nanofabrication",
+                  "quality_inspection",
+                  "assembly",
+                  "final_validation"
+                ]
+              },
+              "resource_requirements": {
+                "manufacturing_equipment_units": 22,
+                "skilled_operators": 55,
+                "quality_inspectors": 16,
+                "facility_space_m2": 22500,
+                "power_consumption_mw": 112.5
+              },
+              "risk_analysis": {
+                "timeline_risks": {
+                  "equipment_downtime": 0.15,
+                  "material_supply_delays": 0.1,
+                  "quality_rework": 0.2,
+                  "skilled_labor_shortage": 0.12,
+                  "regulatory_delays": 0.08
+                },
+                "overall_risk_level": "HIGH"
+              },
+              "optimization_strategies": [
+                "Increase parallel processing capacity",
+                "Implement 24/7 manufacturing schedule",
+                "Pre-qualify materials and suppliers",
+                "Establish redundant quality inspection stations"
+              ],
+              "ecosystem_integration": {
+                "graviton_manufacturing_coordination": true,
+                "ecosystem_benefits": {
+                  "shared_quality_protocols": true,
+                  "leveraged_supply_chains": true,
+                  "cross_system_expertise": true,
+                  "coordinated_scheduling": true,
+                  "enhanced_safety_protocols": true
+                },
+                "medical_grade_protocols": true
+              }
+            }
+          }
+        },
+        "feasibility_assessment": {
+          "feasibility_scores": {
+            "nanofabrication": 0.82,
+            "scale_up": 0.3,
+            "timeline": 0.2,
+            "cost": 0.4
+          },
+          "overall_feasibility_score": 0.42999999999999994,
+          "manufacturing_readiness_level": "proof_of_concept",
+          "feasibility_rating": "MARGINAL"
+        },
+        "recommendations": {
+          "primary_technology": "atomic_layer_deposition",
+          "critical_improvements_needed": [
+            "Scale-up methodology and equipment development",
+            "Production timeline optimization and risk mitigation",
+            "Cost reduction through process optimization and economies of scale"
+          ],
+          "risk_mitigation_strategies": [
+            "Implement redundant manufacturing lines for critical components",
+            "Establish strategic material supplier partnerships",
+            "Develop rapid prototyping and testing capabilities",
+            "Create comprehensive quality assurance protocols",
+            "Integrate with graviton manufacturing ecosystem for shared resources"
+          ],
+          "investment_priorities": {
+            "timeline": 6000000.0,
+            "scale_up": 3600000.0,
+            "cost": 2160000.0
+          }
+        },
+        "uq_resolution": {
+          "concern_id": "UQ-MANUFACTURING-001",
+          "status": "IMPLEMENTED",
+          "validation_score": 0.42999999999999994,
+          "resolution_date": "2025-07-11T19:47:06.257005",
+          "notes": "Comprehensive manufacturing feasibility assessment complete for FTL hull production"
+        }
+      }
+    },
+    "medium_vessel": {
+      "comprehensive_manufacturing_assessment": {
+        "assessment_info": {
+          "vessel_type": "medium_vessel",
+          "assessment_date": "2025-07-11T19:47:06.258363",
+          "hull_specifications": {
+            "dimensions": [
+              100,
+              20,
+              5
+            ],
+            "strut_diameter": 300,
+            "production_timeline": 365,
+            "budget": 500000000.0,
+            "quality": "QualityStandard.FTL_GRADE"
+          },
+          "graviton_ecosystem_integration": true
+        },
+        "individual_analyses": {
+          "nanofabrication": {
+            "nanofabrication_analysis": {
+              "target_strut_diameter_nm": 300,
+              "structure_type": "plate_nanolattice",
+              "feasible_technologies": [
+                {
+                  "technology": "atomic_layer_deposition",
+                  "resolution_adequate": true,
+                  "quality_adequate": true,
+                  "defect_acceptable": true,
+                  "feasibility_score": 1.0,
+                  "scalability_score": 0.4,
+                  "overall_score": 0.82,
+                  "process_details": "ManufacturingProcess(technology=<ManufacturingTechnology.ATOMIC_LAYER_DEPOSITION: 'atomic_layer_deposition'>, resolution=1, throughput=10, defect_rate=0.001, setup_time=10, operational_cost=1500, equipment_cost=12000000.0, quality_achievable=<QualityStandard.FTL_GRADE: 'ftl_grade'>, scalability_factor=0.4)",
+                  "complexity_adjusted_score": 0.727012
+                },
+                {
+                  "technology": "focused_ion_beam",
+                  "resolution_adequate": true,
+                  "quality_adequate": true,
+                  "defect_acceptable": true,
+                  "feasibility_score": 1.0,
+                  "scalability_score": 0.3,
+                  "overall_score": 0.7899999999999999,
+                  "process_details": "ManufacturingProcess(technology=<ManufacturingTechnology.FOCUSED_ION_BEAM: 'focused_ion_beam'>, resolution=5, throughput=5, defect_rate=0.005, setup_time=8, operational_cost=1200, equipment_cost=8000000.0, quality_achievable=<QualityStandard.FTL_GRADE: 'ftl_grade'>, scalability_factor=0.3)",
+                  "complexity_adjusted_score": 0.700414
+                },
+                {
+                  "technology": "molecular_beam_epitaxy",
+                  "resolution_adequate": true,
+                  "quality_adequate": true,
+                  "defect_acceptable": true,
+                  "feasibility_score": 1.0,
+                  "scalability_score": 0.2,
+                  "overall_score": 0.76,
+                  "process_details": "ManufacturingProcess(technology=<ManufacturingTechnology.MOLECULAR_BEAM_EPITAXY: 'molecular_beam_epitaxy'>, resolution=0.5, throughput=2, defect_rate=0.0005, setup_time=12, operational_cost=2000, equipment_cost=15000000.0, quality_achievable=<QualityStandard.FTL_GRADE: 'ftl_grade'>, scalability_factor=0.2)",
+                  "complexity_adjusted_score": 0.6738160000000001
+                },
+                {
+                  "technology": "two_photon_lithography",
+                  "resolution_adequate": true,
+                  "quality_adequate": true,
+                  "defect_acceptable": false,
+                  "feasibility_score": 0.7,
+                  "scalability_score": 0.8,
+                  "overall_score": 0.6579999999999999,
+                  "process_details": "ManufacturingProcess(technology=<ManufacturingTechnology.TWO_PHOTON_LITHOGRAPHY: 'two_photon_lithography'>, resolution=100, throughput=50, defect_rate=0.02, setup_time=4, operational_cost=500, equipment_cost=2000000.0, quality_achievable=<QualityStandard.MEDICAL_GRADE: 'medical_grade'>, scalability_factor=0.8)",
+                  "complexity_adjusted_score": 0.5833828
+                },
+                {
+                  "technology": "electron_beam_lithography",
+                  "resolution_adequate": true,
+                  "quality_adequate": true,
+                  "defect_acceptable": false,
+                  "feasibility_score": 0.7,
+                  "scalability_score": 0.6,
+                  "overall_score": 0.6159999999999999,
+                  "process_details": "ManufacturingProcess(technology=<ManufacturingTechnology.ELECTRON_BEAM_LITHOGRAPHY: 'electron_beam_lithography'>, resolution=10, throughput=20, defect_rate=0.01, setup_time=6, operational_cost=800, equipment_cost=5000000.0, quality_achievable=<QualityStandard.FTL_GRADE: 'ftl_grade'>, scalability_factor=0.6)",
+                  "complexity_adjusted_score": 0.5461455999999999
+                }
+              ],
+              "best_technology": {
+                "technology": "atomic_layer_deposition",
+                "resolution_adequate": true,
+                "quality_adequate": true,
+                "defect_acceptable": true,
+                "feasibility_score": 1.0,
+                "scalability_score": 0.4,
+                "overall_score": 0.82,
+                "process_details": "ManufacturingProcess(technology=<ManufacturingTechnology.ATOMIC_LAYER_DEPOSITION: 'atomic_layer_deposition'>, resolution=1, throughput=10, defect_rate=0.001, setup_time=10, operational_cost=1500, equipment_cost=12000000.0, quality_achievable=<QualityStandard.FTL_GRADE: 'ftl_grade'>, scalability_factor=0.4)",
+                "complexity_adjusted_score": 0.727012
+              },
+              "structure_complexity_factors": {
+                "geometric_complexity": 0.7,
+                "assembly_difficulty": 0.6,
+                "quality_criticality": 0.9
+              },
+              "manufacturing_recommendations": [
+                "Good manufacturing capability - minor process optimization recommended",
+                "Primary recommendation: atomic_layer_deposition",
+                "Backup technology: focused_ion_beam"
+              ]
+            }
+          },
+          "scale_up": {
+            "scale_up_analysis": {
+              "scale_factors": {
+                "lab_dimensions_m": [
+                  0.001,
+                  0.001,
+                  0.001
+                ],
+                "vessel_dimensions_m": [
+                  100,
+                  20,
+                  5
+                ],
+                "volume_scale_factor": 10000000000000.0,
+                "max_linear_scale": 100000.0
+              },
+              "manufacturing_scaling": {
+                "equipment_requirements": {
+                  "parallel_processing_units": 10000000000,
+                  "coordination_complexity": 316.22776601683796,
+                  "quality_assurance_stations": 20000000000,
+                  "assembly_automation_level": 0.43
+                },
+                "fabrication_time_hours": 39810.71705534967,
+                "quality_control_time_hours": 499999999.9999995,
+                "assembly_time_hours": 199999999.9999999,
+                "total_production_time_hours": 700039810.7170547
+              },
+              "cost_analysis": {
+                "material_cost_usd": 3e+18,
+                "equipment_cost_usd": 126191468896038.56,
+                "labor_cost_usd": 210011943215.11642,
+                "total_cost_usd": 3.0001264014808397e+18
+              },
+              "risk_assessment": {
+                "individual_risks": {
+                  "dimensional_accuracy_degradation": 0.5,
+                  "defect_propagation_risk": 0.3,
+                  "assembly_tolerance_accumulation": 0.4,
+                  "quality_control_complexity": 0.6,
+                  "production_timeline_risk": 0.5
+                },
+                "overall_risk_score": 0.4600000000000001,
+                "risk_level": "HIGH"
+              },
+              "feasibility_assessment": {
+                "criteria": {
+                  "time_feasible": "False",
+                  "cost_feasible": "False",
+                  "risk_acceptable": "False",
+                  "technical_achievable": true
+                },
+                "overall_feasible": false,
+                "critical_constraints": [
+                  "time_feasible",
+                  "cost_feasible",
+                  "risk_acceptable"
+                ]
+              },
+              "golden_ratio_optimization": {
+                "enhancement_factor": 196.38699100999082,
+                "optimized_time_hours": 698667718.2081077,
+                "optimized_cost_usd": 2.994246091677959e+18,
+                "optimized_risk_score": 0.459098390485151,
+                "optimization_benefit": "0.2% time reduction"
+              }
+            }
+          },
+          "timeline": {
+            "production_timeline_analysis": {
+              "hull_requirements": {
+                "dimensions_m": [
+                  100,
+                  20,
+                  5
+                ],
+                "total_volume_m3": "10000",
+                "target_timeline_days": 365,
+                "quality_standard": "ftl_grade"
+              },
+              "manufacturing_breakdown": {
+                "segments_needed": 25000,
+                "segment_size_m": [
+                  2,
+                  2,
+                  0.1
+                ],
+                "selected_technology": "atomic_layer_deposition",
+                "phases": {
+                  "design_and_simulation": {
+                    "duration_days": 30,
+                    "parallel_possible": false,
+                    "critical_path": true,
+                    "resources_required": [
+                      "design_team",
+                      "simulation_cluster"
+                    ]
+                  },
+                  "equipment_setup": {
+                    "duration_days": 60,
+                    "parallel_possible": true,
+                    "critical_path": true,
+                    "resources_required": [
+                      "manufacturing_equipment",
+                      "facility_preparation"
+                    ]
+                  },
+                  "material_preparation": {
+                    "duration_days": 14,
+                    "parallel_possible": true,
+                    "critical_path": false,
+                    "resources_required": [
+                      "raw_materials",
+                      "purification_systems"
+                    ]
+                  },
+                  "nanofabrication": {
+                    "duration_days": 2500.0,
+                    "parallel_possible": true,
+                    "critical_path": true,
+                    "resources_required": [
+                      "fabrication_equipment",
+                      "operators"
+                    ]
+                  },
+                  "quality_inspection": {
+                    "duration_days": 50000,
+                    "parallel_possible": true,
+                    "critical_path": true,
+                    "resources_required": [
+                      "inspection_equipment",
+                      "quality_team"
+                    ]
+                  },
+                  "assembly": {
+                    "duration_days": 37500.0,
+                    "parallel_possible": false,
+                    "critical_path": true,
+                    "resources_required": [
+                      "assembly_robots",
+                      "precision_tooling"
+                    ]
+                  },
+                  "final_validation": {
+                    "duration_days": 21,
+                    "parallel_possible": false,
+                    "critical_path": true,
+                    "resources_required": [
+                      "test_facilities",
+                      "validation_team"
+                    ]
+                  },
+                  "documentation": {
+                    "duration_days": 14,
+                    "parallel_possible": true,
+                    "critical_path": false,
+                    "resources_required": [
+                      "documentation_team",
+                      "certification_body"
+                    ]
+                  }
+                }
+              },
+              "timeline_results": {
+                "baseline_duration_days": 87551.0,
+                "risk_adjusted_duration_days": 116005.075,
+                "timeline_feasible": false,
+                "timeline_margin_days": -115640.075,
+                "critical_path_phases": [
+                  "design_and_simulation",
+                  "equipment_setup",
+                  "nanofabrication",
+                  "quality_inspection",
+                  "assembly",
+                  "final_validation"
+                ]
+              },
+              "resource_requirements": {
+                "manufacturing_equipment_units": 2500,
+                "skilled_operators": 5010,
+                "quality_inspectors": 1255,
+                "facility_space_m2": 2500000,
+                "power_consumption_mw": 12500.0
+              },
+              "risk_analysis": {
+                "timeline_risks": {
+                  "equipment_downtime": 0.15,
+                  "material_supply_delays": 0.1,
+                  "quality_rework": 0.2,
+                  "skilled_labor_shortage": 0.12,
+                  "regulatory_delays": 0.08
+                },
+                "overall_risk_level": "HIGH"
+              },
+              "optimization_strategies": [
+                "Increase parallel processing capacity",
+                "Implement 24/7 manufacturing schedule",
+                "Pre-qualify materials and suppliers",
+                "Establish redundant quality inspection stations"
+              ],
+              "ecosystem_integration": {
+                "graviton_manufacturing_coordination": true,
+                "ecosystem_benefits": {
+                  "shared_quality_protocols": true,
+                  "leveraged_supply_chains": true,
+                  "cross_system_expertise": true,
+                  "coordinated_scheduling": true,
+                  "enhanced_safety_protocols": true
+                },
+                "medical_grade_protocols": true
+              }
+            }
+          }
+        },
+        "feasibility_assessment": {
+          "feasibility_scores": {
+            "nanofabrication": 0.82,
+            "scale_up": 0.3,
+            "timeline": 0.2,
+            "cost": 0.4
+          },
+          "overall_feasibility_score": 0.42999999999999994,
+          "manufacturing_readiness_level": "proof_of_concept",
+          "feasibility_rating": "MARGINAL"
+        },
+        "recommendations": {
+          "primary_technology": "atomic_layer_deposition",
+          "critical_improvements_needed": [
+            "Scale-up methodology and equipment development",
+            "Production timeline optimization and risk mitigation",
+            "Cost reduction through process optimization and economies of scale"
+          ],
+          "risk_mitigation_strategies": [
+            "Implement redundant manufacturing lines for critical components",
+            "Establish strategic material supplier partnerships",
+            "Develop rapid prototyping and testing capabilities",
+            "Create comprehensive quality assurance protocols",
+            "Integrate with graviton manufacturing ecosystem for shared resources"
+          ],
+          "investment_priorities": {
+            "timeline": 30000000.000000004,
+            "scale_up": 25000000.0,
+            "cost": 20000000.0
+          }
+        },
+        "uq_resolution": {
+          "concern_id": "UQ-MANUFACTURING-001",
+          "status": "IMPLEMENTED",
+          "validation_score": 0.42999999999999994,
+          "resolution_date": "2025-07-11T19:47:06.258363",
+          "notes": "Comprehensive manufacturing feasibility assessment complete for FTL hull production"
+        }
+      }
+    },
+    "large_vessel": {
+      "comprehensive_manufacturing_assessment": {
+        "assessment_info": {
+          "vessel_type": "large_vessel",
+          "assessment_date": "2025-07-11T19:47:06.258363",
+          "hull_specifications": {
+            "dimensions": [
+              200,
+              40,
+              10
+            ],
+            "strut_diameter": 300,
+            "production_timeline": 730,
+            "budget": 2000000000.0,
+            "quality": "QualityStandard.FTL_GRADE"
+          },
+          "graviton_ecosystem_integration": true
+        },
+        "individual_analyses": {
+          "nanofabrication": {
+            "nanofabrication_analysis": {
+              "target_strut_diameter_nm": 300,
+              "structure_type": "plate_nanolattice",
+              "feasible_technologies": [
+                {
+                  "technology": "atomic_layer_deposition",
+                  "resolution_adequate": true,
+                  "quality_adequate": true,
+                  "defect_acceptable": true,
+                  "feasibility_score": 1.0,
+                  "scalability_score": 0.4,
+                  "overall_score": 0.82,
+                  "process_details": "ManufacturingProcess(technology=<ManufacturingTechnology.ATOMIC_LAYER_DEPOSITION: 'atomic_layer_deposition'>, resolution=1, throughput=10, defect_rate=0.001, setup_time=10, operational_cost=1500, equipment_cost=12000000.0, quality_achievable=<QualityStandard.FTL_GRADE: 'ftl_grade'>, scalability_factor=0.4)",
+                  "complexity_adjusted_score": 0.727012
+                },
+                {
+                  "technology": "focused_ion_beam",
+                  "resolution_adequate": true,
+                  "quality_adequate": true,
+                  "defect_acceptable": true,
+                  "feasibility_score": 1.0,
+                  "scalability_score": 0.3,
+                  "overall_score": 0.7899999999999999,
+                  "process_details": "ManufacturingProcess(technology=<ManufacturingTechnology.FOCUSED_ION_BEAM: 'focused_ion_beam'>, resolution=5, throughput=5, defect_rate=0.005, setup_time=8, operational_cost=1200, equipment_cost=8000000.0, quality_achievable=<QualityStandard.FTL_GRADE: 'ftl_grade'>, scalability_factor=0.3)",
+                  "complexity_adjusted_score": 0.700414
+                },
+                {
+                  "technology": "molecular_beam_epitaxy",
+                  "resolution_adequate": true,
+                  "quality_adequate": true,
+                  "defect_acceptable": true,
+                  "feasibility_score": 1.0,
+                  "scalability_score": 0.2,
+                  "overall_score": 0.76,
+                  "process_details": "ManufacturingProcess(technology=<ManufacturingTechnology.MOLECULAR_BEAM_EPITAXY: 'molecular_beam_epitaxy'>, resolution=0.5, throughput=2, defect_rate=0.0005, setup_time=12, operational_cost=2000, equipment_cost=15000000.0, quality_achievable=<QualityStandard.FTL_GRADE: 'ftl_grade'>, scalability_factor=0.2)",
+                  "complexity_adjusted_score": 0.6738160000000001
+                },
+                {
+                  "technology": "two_photon_lithography",
+                  "resolution_adequate": true,
+                  "quality_adequate": true,
+                  "defect_acceptable": false,
+                  "feasibility_score": 0.7,
+                  "scalability_score": 0.8,
+                  "overall_score": 0.6579999999999999,
+                  "process_details": "ManufacturingProcess(technology=<ManufacturingTechnology.TWO_PHOTON_LITHOGRAPHY: 'two_photon_lithography'>, resolution=100, throughput=50, defect_rate=0.02, setup_time=4, operational_cost=500, equipment_cost=2000000.0, quality_achievable=<QualityStandard.MEDICAL_GRADE: 'medical_grade'>, scalability_factor=0.8)",
+                  "complexity_adjusted_score": 0.5833828
+                },
+                {
+                  "technology": "electron_beam_lithography",
+                  "resolution_adequate": true,
+                  "quality_adequate": true,
+                  "defect_acceptable": false,
+                  "feasibility_score": 0.7,
+                  "scalability_score": 0.6,
+                  "overall_score": 0.6159999999999999,
+                  "process_details": "ManufacturingProcess(technology=<ManufacturingTechnology.ELECTRON_BEAM_LITHOGRAPHY: 'electron_beam_lithography'>, resolution=10, throughput=20, defect_rate=0.01, setup_time=6, operational_cost=800, equipment_cost=5000000.0, quality_achievable=<QualityStandard.FTL_GRADE: 'ftl_grade'>, scalability_factor=0.6)",
+                  "complexity_adjusted_score": 0.5461455999999999
+                }
+              ],
+              "best_technology": {
+                "technology": "atomic_layer_deposition",
+                "resolution_adequate": true,
+                "quality_adequate": true,
+                "defect_acceptable": true,
+                "feasibility_score": 1.0,
+                "scalability_score": 0.4,
+                "overall_score": 0.82,
+                "process_details": "ManufacturingProcess(technology=<ManufacturingTechnology.ATOMIC_LAYER_DEPOSITION: 'atomic_layer_deposition'>, resolution=1, throughput=10, defect_rate=0.001, setup_time=10, operational_cost=1500, equipment_cost=12000000.0, quality_achievable=<QualityStandard.FTL_GRADE: 'ftl_grade'>, scalability_factor=0.4)",
+                "complexity_adjusted_score": 0.727012
+              },
+              "structure_complexity_factors": {
+                "geometric_complexity": 0.7,
+                "assembly_difficulty": 0.6,
+                "quality_criticality": 0.9
+              },
+              "manufacturing_recommendations": [
+                "Good manufacturing capability - minor process optimization recommended",
+                "Primary recommendation: atomic_layer_deposition",
+                "Backup technology: focused_ion_beam"
+              ]
+            }
+          },
+          "scale_up": {
+            "scale_up_analysis": {
+              "scale_factors": {
+                "lab_dimensions_m": [
+                  0.001,
+                  0.001,
+                  0.001
+                ],
+                "vessel_dimensions_m": [
+                  200,
+                  40,
+                  10
+                ],
+                "volume_scale_factor": 80000000000000.0,
+                "max_linear_scale": 200000.0
+              },
+              "manufacturing_scaling": {
+                "equipment_requirements": {
+                  "parallel_processing_units": 80000000000,
+                  "coordination_complexity": 447.21359549995793,
+                  "quality_assurance_stations": 160000000000,
+                  "assembly_automation_level": 0.4390308998699194
+                },
+                "fabrication_time_hours": 60341.76336545155,
+                "quality_control_time_hours": 1319507910.772893,
+                "assembly_time_hours": 459479341.99881375,
+                "total_production_time_hours": 1779047594.5350723
+              },
+              "cost_analysis": {
+                "material_cost_usd": 2.4e+19,
+                "equipment_cost_usd": 439424217322446.75,
+                "labor_cost_usd": 544425212153.8999,
+                "total_cost_usd": 2.4000439968642535e+19
+              },
+              "risk_assessment": {
+                "individual_risks": {
+                  "dimensional_accuracy_degradation": 0.5,
+                  "defect_propagation_risk": 0.3,
+                  "assembly_tolerance_accumulation": 0.4,
+                  "quality_control_complexity": 0.6,
+                  "production_timeline_risk": 0.5
+                },
+                "overall_risk_score": 0.4600000000000001,
+                "risk_level": "HIGH"
+              },
+              "feasibility_assessment": {
+                "criteria": {
+                  "time_feasible": "False",
+                  "cost_feasible": "False",
+                  "risk_acceptable": "False",
+                  "technical_achievable": false
+                },
+                "overall_feasible": false,
+                "critical_constraints": [
+                  "time_feasible",
+                  "cost_feasible",
+                  "risk_acceptable",
+                  "technical_achievable"
+                ]
+              },
+              "golden_ratio_optimization": {
+                "enhancement_factor": 196.38699100999082,
+                "optimized_time_hours": 1775560624.4511545,
+                "optimized_cost_usd": 2.395339860986799e+19,
+                "optimized_risk_score": 0.459098390485151,
+                "optimization_benefit": "0.2% time reduction"
+              }
+            }
+          },
+          "timeline": {
+            "production_timeline_analysis": {
+              "hull_requirements": {
+                "dimensions_m": [
+                  200,
+                  40,
+                  10
+                ],
+                "total_volume_m3": "80000",
+                "target_timeline_days": 730,
+                "quality_standard": "ftl_grade"
+              },
+              "manufacturing_breakdown": {
+                "segments_needed": 200000,
+                "segment_size_m": [
+                  2,
+                  2,
+                  0.1
+                ],
+                "selected_technology": "atomic_layer_deposition",
+                "phases": {
+                  "design_and_simulation": {
+                    "duration_days": 30,
+                    "parallel_possible": false,
+                    "critical_path": true,
+                    "resources_required": [
+                      "design_team",
+                      "simulation_cluster"
+                    ]
+                  },
+                  "equipment_setup": {
+                    "duration_days": 60,
+                    "parallel_possible": true,
+                    "critical_path": true,
+                    "resources_required": [
+                      "manufacturing_equipment",
+                      "facility_preparation"
+                    ]
+                  },
+                  "material_preparation": {
+                    "duration_days": 14,
+                    "parallel_possible": true,
+                    "critical_path": false,
+                    "resources_required": [
+                      "raw_materials",
+                      "purification_systems"
+                    ]
+                  },
+                  "nanofabrication": {
+                    "duration_days": 20000.0,
+                    "parallel_possible": true,
+                    "critical_path": true,
+                    "resources_required": [
+                      "fabrication_equipment",
+                      "operators"
+                    ]
+                  },
+                  "quality_inspection": {
+                    "duration_days": 400000,
+                    "parallel_possible": true,
+                    "critical_path": true,
+                    "resources_required": [
+                      "inspection_equipment",
+                      "quality_team"
+                    ]
+                  },
+                  "assembly": {
+                    "duration_days": 300000.0,
+                    "parallel_possible": false,
+                    "critical_path": true,
+                    "resources_required": [
+                      "assembly_robots",
+                      "precision_tooling"
+                    ]
+                  },
+                  "final_validation": {
+                    "duration_days": 21,
+                    "parallel_possible": false,
+                    "critical_path": true,
+                    "resources_required": [
+                      "test_facilities",
+                      "validation_team"
+                    ]
+                  },
+                  "documentation": {
+                    "duration_days": 14,
+                    "parallel_possible": true,
+                    "critical_path": false,
+                    "resources_required": [
+                      "documentation_team",
+                      "certification_body"
+                    ]
+                  }
+                }
+              },
+              "timeline_results": {
+                "baseline_duration_days": 700051.0,
+                "risk_adjusted_duration_days": 927567.575,
+                "timeline_feasible": false,
+                "timeline_margin_days": -926837.575,
+                "critical_path_phases": [
+                  "design_and_simulation",
+                  "equipment_setup",
+                  "nanofabrication",
+                  "quality_inspection",
+                  "assembly",
+                  "final_validation"
+                ]
+              },
+              "resource_requirements": {
+                "manufacturing_equipment_units": 20000,
+                "skilled_operators": 40010,
+                "quality_inspectors": 10005,
+                "facility_space_m2": 20000000,
+                "power_consumption_mw": 100000.0
+              },
+              "risk_analysis": {
+                "timeline_risks": {
+                  "equipment_downtime": 0.15,
+                  "material_supply_delays": 0.1,
+                  "quality_rework": 0.2,
+                  "skilled_labor_shortage": 0.12,
+                  "regulatory_delays": 0.08
+                },
+                "overall_risk_level": "HIGH"
+              },
+              "optimization_strategies": [
+                "Increase parallel processing capacity",
+                "Implement 24/7 manufacturing schedule",
+                "Pre-qualify materials and suppliers",
+                "Establish redundant quality inspection stations"
+              ],
+              "ecosystem_integration": {
+                "graviton_manufacturing_coordination": true,
+                "ecosystem_benefits": {
+                  "shared_quality_protocols": true,
+                  "leveraged_supply_chains": true,
+                  "cross_system_expertise": true,
+                  "coordinated_scheduling": true,
+                  "enhanced_safety_protocols": true
+                },
+                "medical_grade_protocols": true
+              }
+            }
+          }
+        },
+        "feasibility_assessment": {
+          "feasibility_scores": {
+            "nanofabrication": 0.82,
+            "scale_up": 0.3,
+            "timeline": 0.2,
+            "cost": 0.4
+          },
+          "overall_feasibility_score": 0.42999999999999994,
+          "manufacturing_readiness_level": "proof_of_concept",
+          "feasibility_rating": "MARGINAL"
+        },
+        "recommendations": {
+          "primary_technology": "atomic_layer_deposition",
+          "critical_improvements_needed": [
+            "Scale-up methodology and equipment development",
+            "Production timeline optimization and risk mitigation",
+            "Cost reduction through process optimization and economies of scale"
+          ],
+          "risk_mitigation_strategies": [
+            "Implement redundant manufacturing lines for critical components",
+            "Establish strategic material supplier partnerships",
+            "Develop rapid prototyping and testing capabilities",
+            "Create comprehensive quality assurance protocols",
+            "Integrate with graviton manufacturing ecosystem for shared resources"
+          ],
+          "investment_priorities": {
+            "timeline": 30000000.000000004,
+            "scale_up": 25000000.0,
+            "cost": 20000000.0
+          }
+        },
+        "uq_resolution": {
+          "concern_id": "UQ-MANUFACTURING-001",
+          "status": "IMPLEMENTED",
+          "validation_score": 0.42999999999999994,
+          "resolution_date": "2025-07-11T19:47:06.258363",
+          "notes": "Comprehensive manufacturing feasibility assessment complete for FTL hull production"
+        }
+      }
+    }
+  },
+  "validation": {
+    "medical_grade_protocols": true,
+    "quality_standards": [
+      "QualityStandard.RESEARCH_GRADE",
+      "QualityStandard.INDUSTRIAL_GRADE",
+      "QualityStandard.AEROSPACE_GRADE",
+      "QualityStandard.MEDICAL_GRADE",
+      "QualityStandard.FTL_GRADE"
+    ],
+    "manufacturing_technologies": [
+      "ManufacturingTechnology.TWO_PHOTON_LITHOGRAPHY",
+      "ManufacturingTechnology.ELECTRON_BEAM_LITHOGRAPHY",
+      "ManufacturingTechnology.FOCUSED_ION_BEAM",
+      "ManufacturingTechnology.CHEMICAL_VAPOR_DEPOSITION",
+      "ManufacturingTechnology.ATOMIC_LAYER_DEPOSITION",
+      "ManufacturingTechnology.MOLECULAR_BEAM_EPITAXY"
+    ]
+  }
+}
