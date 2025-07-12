@@ -207,6 +207,10 @@
 		{
 			"name": "warp-solver-equations",
 			"path": "../warp-solver-equations"
+		},
+		{
+			"name": "lorentz-violation-pipeline",
+			"path": "../lorentz-violation-pipeline"
 		}
 	],
 	"settings": {
