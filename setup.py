@@ -14,10 +14,10 @@ with open("requirements.txt", "r", encoding="utf-8") as fh:
 
 setup(
     name="enhanced-simulation-framework",
-    version="1.0.0",
+    version="2.0.0",
     author="Enhanced Simulation Team",
     author_email="enhanced-simulation@example.com",
-    description="Enhanced Simulation & Hardware Abstraction Framework with 1.2×10¹⁰× amplification",
+    description="Enhanced Simulation & Hardware Abstraction Framework with revolutionary FTL-capable hull design for 48c superluminal operations",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/arcticoder/enhanced-simulation-hardware-abstraction-framework",
@@ -76,7 +76,14 @@ setup(
         "enhancement",
         "hardware-abstraction",
         "digital-twin",
-        "zero-budget-validation"
+        "zero-budget-validation",
+        "ftl-hull-design",
+        "naval-architecture",
+        "superluminal-operations",
+        "48c-velocity",
+        "advanced-materials",
+        "nanolattices",
+        "graphene-metamaterials"
     ],
     project_urls={
         "Bug Reports": "https://github.com/arcticoder/enhanced-simulation-hardware-abstraction-framework/issues",
