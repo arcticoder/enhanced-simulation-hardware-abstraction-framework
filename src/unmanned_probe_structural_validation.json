@@ -1,0 +1,74 @@
+{
+  "framework_type": "UnmannedProbeStructuralFramework",
+  "performance_metrics": {
+    "structural_analysis": {
+      "mass_reductions": {
+        "life_support_elimination": 0.25,
+        "crew_accommodation_removal": 0.15,
+        "safety_system_reduction": 0.2,
+        "hull_optimization": 0.12,
+        "internal_structure_reduction": 0.08
+      },
+      "total_mass_reduction": 0.8,
+      "velocity_enhancement": {
+        "base_velocity_c": 48.0,
+        "mass_reduction_factor": 0.8,
+        "efficiency_factor": 1.8,
+        "velocity_multiplier": 2.4400000000000004,
+        "enhanced_velocity_c": 117.12000000000002,
+        "velocity_improvement": 69.12000000000002,
+        "target_achievement": true
+      },
+      "structural_integrity": {
+        "integrity_requirements": {
+          "tidal_force_resistance": 0.6,
+          "acceleration_tolerance": 0.4,
+          "vibration_resistance": 0.7,
+          "thermal_cycling": 0.8,
+          "micrometeorite_protection": 0.85
+        },
+        "structural_adequacy": {
+          "tidal_force_resistance": {
+            "baseline_capability": 1.0,
+            "reduced_requirement": 0.6,
+            "adequacy_margin": 1.6666666666666667,
+            "adequate": true
+          },
+          "acceleration_tolerance": {
+            "baseline_capability": 1.0,
+            "reduced_requirement": 0.4,
+            "adequacy_margin": 2.5,
+            "adequate": true
+          },
+          "vibration_resistance": {
+            "baseline_capability": 1.0,
+            "reduced_requirement": 0.7,
+            "adequacy_margin": 1.4285714285714286,
+            "adequate": true
+          },
+          "thermal_cycling": {
+            "baseline_capability": 1.0,
+            "reduced_requirement": 0.8,
+            "adequacy_margin": 1.25,
+            "adequate": true
+          },
+          "micrometeorite_protection": {
+            "baseline_capability": 1.0,
+            "reduced_requirement": 0.85,
+            "adequacy_margin": 1.1764705882352942,
+            "adequate": false
+          }
+        },
+        "overall_adequacy": false
+      },
+      "mission_viability": {
+        "mission_factors": {
+          "autonomous_operation_capability": 0.92,
+          "communication_system_reliability": 0.95,
+          "instrument_protection_level": 0.9,
+          "power_system_efficiency": 0.88,
+          "navigation_system_accuracy": 0.94
+        },
+        "overall_viability": 0.9179999999999999,
+        "mission_success_probability": 0.8720999999999999,
+        "meets_requirements": 
