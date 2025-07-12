@@ -25,52 +25,24 @@
 			"path": "../casimir-tunable-permittivity-stacks"
 		},
 		{
-			"name": "energy",
-			"path": "../energy"
-		},
-		{
-			"name": "lqg-anec-framework",
-			"path": "../lqg-anec-framework"
-		},
-		{
-			"name": "su2-3nj-closedform",
-			"path": "../su2-3nj-closedform"
-		},
-		{
-			"name": "su2-3nj-generating-functional",
-			"path": "../su2-3nj-generating-functional"
-		},
-		{
-			"name": "su2-3nj-uniform-closed-form",
-			"path": "../su2-3nj-uniform-closed-form"
-		},
-		{
-			"name": "su2-node-matrix-elements",
-			"path": "../su2-node-matrix-elements"
-		},
-		{
-			"name": "unified-lqg",
-			"path": "../unified-lqg"
-		},
-		{
-			"name": "warp-bubble-optimizer",
-			"path": "../warp-bubble-optimizer"
-		},
-		{
-			"name": "warp-field-coils",
-			"path": "../warp-field-coils"
-		},
-		{
-			"name": "warp-spacetime-stability-controller",
-			"path": "../warp-spacetime-stability-controller"
-		},
-		{
 			"name": "casimir-ultra-smooth-fabrication-platform",
 			"path": "../casimir-ultra-smooth-fabrication-platform"
 		},
 		{
 			"name": "elemental-transmutator",
 			"path": "../elemental-transmutator"
+		},
+		{
+			"name": "energy",
+			"path": "../energy"
+		},
+		{
+			"name": "lorentz-violation-pipeline",
+			"path": "../lorentz-violation-pipeline"
+		},
+		{
+			"name": "lqg-anec-framework",
+			"path": "../lqg-anec-framework"
 		},
 		{
 			"name": "lqg-cosmological-constant-predictor",
@@ -125,12 +97,32 @@
 			"path": "../polymerized-lqg-replicator-recycler"
 		},
 		{
+			"name": "su2-3nj-closedform",
+			"path": "../su2-3nj-closedform"
+		},
+		{
+			"name": "su2-3nj-generating-functional",
+			"path": "../su2-3nj-generating-functional"
+		},
+		{
 			"name": "su2-3nj-recurrences",
 			"path": "../su2-3nj-recurrences"
 		},
 		{
+			"name": "su2-3nj-uniform-closed-form",
+			"path": "../su2-3nj-uniform-closed-form"
+		},
+		{
+			"name": "su2-node-matrix-elements",
+			"path": "../su2-node-matrix-elements"
+		},
+		{
 			"name": "unified-gut-polymerization",
 			"path": "../unified-gut-polymerization"
+		},
+		{
+			"name": "unified-lqg",
+			"path": "../unified-lqg"
 		},
 		{
 			"name": "unified-lqg-qft",
@@ -165,6 +157,10 @@
 			"path": "../warp-bubble-mvp-simulator"
 		},
 		{
+			"name": "warp-bubble-optimizer",
+			"path": "../warp-bubble-optimizer"
+		},
+		{
 			"name": "warp-bubble-parameter-constraints",
 			"path": "../warp-bubble-parameter-constraints"
 		},
@@ -189,6 +185,10 @@
 			"path": "../warp-discretization"
 		},
 		{
+			"name": "warp-field-coils",
+			"path": "../warp-field-coils"
+		},
+		{
 			"name": "warp-lqg-midisuperspace",
 			"path": "../warp-lqg-midisuperspace"
 		},
@@ -209,8 +209,8 @@
 			"path": "../warp-solver-equations"
 		},
 		{
-			"name": "lorentz-violation-pipeline",
-			"path": "../lorentz-violation-pipeline"
+			"name": "warp-spacetime-stability-controller",
+			"path": "../warp-spacetime-stability-controller"
 		}
 	],
 	"settings": {
