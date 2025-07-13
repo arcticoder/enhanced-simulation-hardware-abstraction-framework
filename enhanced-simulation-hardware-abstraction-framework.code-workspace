@@ -209,6 +209,10 @@
 			"path": "../warp-solver-equations"
 		},
 		{
+			"name": "warp-solver-validation",
+			"path": "../warp-solver-validation"
+		},
+		{
 			"name": "warp-spacetime-stability-controller",
 			"path": "../warp-spacetime-stability-controller"
 		}
