@@ -283,6 +283,60 @@ class TestUnmannedProbeDesign(unittest.TestCase):
         
         # Clean up test file
         export_path.unlink()
+        
+    def test_zero_exotic_energy_validation(self):
+        """Test that probe design confirms zero exotic energy framework"""
+        physics_validation = self.framework.validate_physics_framework()
+        
+        # Verify physics framework components
+        validation = physics_validation['physics_validation']
+        compliance = physics_validation['compliance_check']
+        
+        # Check zero exotic requirements
+        self.assertFalse(validation['exotic_matter_required'])
+        self.assertFalse(validation['exotic_energy_required'])
+        self.assertEqual(validation['framework_basis'], 'Loop Quantum Gravity (LQG) FTL Metric Engineering')
+        
+        # Verify compliance
+        self.assertFalse(compliance['forbidden_physics_used'])
+        self.assertTrue(compliance['physics_framework_valid'])
+        self.assertTrue(compliance['production_ready'])
+        
+        # Check safety certification
+        safety = validation['safety_certification']
+        self.assertTrue(safety['no_causality_violations'])
+        self.assertTrue(safety['no_grandfather_paradox_risk'])
+        
+        print(f"✅ Physics validation: {validation['framework_basis']}")
+        print(f"✅ Exotic matter required: {validation['exotic_matter_required']}")
+        print(f"✅ Energy type: {validation['energy_type']}")
+        
+    def test_velocity_physics_framework(self):
+        """Test that velocity calculations use proper LQG framework"""
+        mass_reduction = 0.99  # 99% mass reduction
+        velocity_analysis = self.framework.calculate_velocity_enhancement(mass_reduction)
+        
+        # Verify LQG-based physics
+        self.assertIn('physics_framework', velocity_analysis)
+        self.assertIn('exotic_matter_required', velocity_analysis)
+        self.assertIn('quantum_geometry_basis', velocity_analysis)
+        
+        # Check zero exotic energy confirmation
+        self.assertFalse(velocity_analysis['exotic_matter_required'])
+        self.assertEqual(velocity_analysis['physics_framework'], 'Zero Exotic Energy LQG-based FTL')
+        self.assertIn('LQG polymer corrections', velocity_analysis['quantum_geometry_basis'])
+        
+        # Verify enhanced performance
+        enhanced_velocity = velocity_analysis['enhanced_velocity_c']
+        coupling_efficiency = velocity_analysis['lqg_coupling_efficiency']
+        
+        self.assertGreater(enhanced_velocity, 48.0)  # Above base velocity
+        self.assertGreater(coupling_efficiency, 1.0)  # Enhanced coupling
+        
+        print(f"✅ Velocity framework: {velocity_analysis['physics_framework']}")
+        print(f"✅ LQG coupling efficiency: {coupling_efficiency:.1f}x")
+        print(f"✅ Enhanced velocity: {enhanced_velocity:.1f}c")
+        print(f"✅ Energy enhancement: {velocity_analysis['energy_enhancement']}")
 
 def run_comprehensive_probe_tests():
     """Run comprehensive unmanned probe design tests"""
