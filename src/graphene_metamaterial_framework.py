@@ -1,914 +1,785 @@
+#!/usr/bin/env python3
 """
-Graphene Metamaterial Theoretical Framework and Assembly Protocol
-===============================================================
+Graphene Metamaterial Theoretical Framework and Assembly
+Revolutionary framework for defect-free bulk 3D graphene metamaterial lattices
 
-Revolutionary theoretical framework for defect-free bulk 3D graphene metamaterial 
-lattices with monolayer-thin struts achieving ~130 GPa tensile strength and ~1 TPa 
-modulus. Combines quantum mechanical modeling, defect prevention protocols, and 
-practical assembly methods for ultimate FTL hull material performance.
-
-Key Breakthroughs:
-- Quantum mechanical assembly modeling for monolayer-thin struts
-- Defect-free structure assembly protocols  
-- 130 GPa strength and 1 TPa modulus theoretical validation
-- Practical manufacturing pathway development
-
-Author: Enhanced Simulation Framework
-Date: July 2025
+Addresses UQ-GRAPHENE-001: Graphene Metamaterial Theoretical Framework
+Repository: enhanced-simulation-hardware-abstraction-framework  
+Priority: CRITICAL (Severity 1) - Ultimate material performance breakthrough
 """
 
 import numpy as np
-import scipy.linalg
-import scipy.optimize
-from dataclasses import dataclass
-from typing import Dict, List, Tuple, Optional, Callable
 import json
+from dataclasses import dataclass
+from typing import Dict, List, Tuple, Optional, Union
 import logging
-from datetime import datetime
+from scipy.sparse import csr_matrix
+from scipy.sparse.linalg import eigsh
 import matplotlib.pyplot as plt
+from matplotlib.patches import Circle
+import networkx as nx
+
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 # Physical constants
-HBAR = 1.054571817e-34  # J⋅s
-KB = 1.380649e-23       # J/K
-E_CHARGE = 1.602176634e-19  # C
-PHI = (1 + np.sqrt(5)) / 2  # Golden ratio
+CARBON_CARBON_BOND_LENGTH = 0.142  # nm
+GRAPHENE_LAYER_SPACING = 0.335     # nm
+PLANCK_CONSTANT = 6.626e-34        # J⋅s
+BOLTZMANN_CONSTANT = 1.381e-23     # J/K
+CARBON_ATOMIC_MASS = 1.994e-26     # kg
 
 @dataclass
-class GrapheneProperties:
-    """Fundamental graphene material properties"""
-    lattice_constant: float = 2.46e-10  # m
-    carbon_carbon_bond: float = 1.42e-10  # m
-    youngs_modulus_2d: float = 1.0e12  # N/m (2D)
-    intrinsic_strength: float = 130e9  # Pa
-    fermi_velocity: float = 1.0e6  # m/s
-    dirac_cone_energy: float = 3.0 * E_CHARGE  # J
+class GrapheneMetamaterialParameters:
+    """Parameters for 3D graphene metamaterial design"""
+    unit_cell_size_nm: float
+    strut_width_monolayers: int  # Number of graphene layers in strut
+    node_diameter_nm: float
+    lattice_type: str  # 'cubic', 'bcc', 'fcc', 'octet'
+    defect_tolerance: float  # Maximum allowable defect density
+    assembly_temperature_k: float
+    van_der_waals_coupling: float  # Strength of inter-layer coupling
+    
+    def validate(self) -> bool:
+        """Validate parameter physical constraints"""
+        return (
+            1.0 <= self.unit_cell_size_nm <= 1000.0 and
+            1 <= self.strut_width_monolayers <= 10 and
+            0.5 <= self.node_diameter_nm <= 50.0 and
+            self.lattice_type in ['cubic', 'bcc', 'fcc', 'octet'] and
+            0.0 <= self.defect_tolerance <= 1e-6 and
+            4 <= self.assembly_temperature_k <= 2000 and
+            0.1 <= self.van_der_waals_coupling <= 10.0
+        )
 
-@dataclass
-class MetamaterialGeometry:
-    """3D metamaterial geometric structure"""
-    unit_cell_size: float  # m
-    strut_width: float     # m (monolayer thickness ~3.35e-10)
-    connectivity: int      # coordination number
-    porosity: float       # fraction of void space
-    lattice_type: str     # 'cubic', 'tetrahedral', 'octet-truss'
-    hierarchical_levels: int  # multi-scale structure levels
+@dataclass 
+class TheoreticalProperties:
+    """Theoretical material properties for graphene metamaterial"""
+    in_plane_elastic_modulus_tpa: float
+    out_of_plane_elastic_modulus_tpa: float
+    ultimate_tensile_strength_gpa: float
+    shear_modulus_tpa: float
+    density_kg_m3: float
+    thermal_conductivity_w_mk: float
+    electrical_conductivity_s_m: float
+    band_gap_ev: float
+    
+    def validate_targets(self) -> bool:
+        """Check if properties meet ultimate performance targets"""
+        return (
+            self.ultimate_tensile_strength_gpa >= 130.0 and
+            self.in_plane_elastic_modulus_tpa >= 1.0 and
+            self.density_kg_m3 <= 500.0  # Ultra-lightweight target
+        )
 
-@dataclass
-class QuantumParameters:
-    """Quantum mechanical parameters for assembly"""
-    wave_function_coherence: float  # 0-1
-    tunneling_probability: float   # 0-1
-    quantum_confinement_energy: float  # J
-    decoherence_time: float        # s
-    entanglement_fidelity: float   # 0-1
-
-@dataclass
-class AssemblyProtocol:
-    """Assembly protocol parameters"""
-    temperature: float      # K
-    pressure: float        # Pa
-    electromagnetic_field: float  # V/m
-    assembly_time: float   # s
-    catalyst_concentration: float  # mol/L
-    defect_healing_enabled: bool
-
-class GrapheneMetamaterialFramework:
-    """
-    Revolutionary framework for defect-free 3D graphene metamaterial design
-    and theoretical assembly protocols
-    """
+class QuantumMechanicalModel:
+    """Quantum mechanical modeling of monolayer-thin strut assembly"""
     
     def __init__(self):
-        self.logger = logging.getLogger(__name__)
-        self.phi = PHI
-        self.graphene_props = GrapheneProperties()
+        self.hbar = 1.055e-34  # Reduced Planck constant
+        self.electron_mass = 9.109e-31  # kg
+        self.electron_charge = 1.602e-19  # C
         
-        # Theoretical performance targets
-        self.targets = {
-            'tensile_strength': 130e9,    # Pa (130 GPa)
-            'youngs_modulus': 1e12,       # Pa (1 TPa) 
-            'specific_strength': 1e8,     # N⋅m/kg
-            'defect_density': 1e-12,      # defects per unit volume
-            'assembly_fidelity': 0.9999   # success rate
-        }
+        # Graphene-specific parameters
+        self.hopping_energy_ev = 2.8  # Nearest neighbor hopping
+        self.fermi_velocity = 1e6     # m/s (Dirac cone velocity)
         
-        # Quantum assembly limits
-        self.quantum_limits = {
-            'coherence_length': 100e-9,   # m (quantum coherence scale)
-            'tunneling_range': 10e-9,     # m
-            'decoherence_time': 1e-12,    # s (femtosecond scale)
-            'energy_barrier': 0.1 * E_CHARGE  # J
-        }
-        
-    def quantum_mechanical_modeling(self, geometry: MetamaterialGeometry) -> Dict:
-        """
-        Quantum mechanical modeling of monolayer-thin strut assembly
-        """
-        self.logger.info("Starting quantum mechanical assembly modeling")
-        
-        # Calculate quantum confinement effects
-        confinement_energy = self._calculate_quantum_confinement(geometry)
-        
-        # Model wave function overlap for bonding
-        wave_function_overlap = self._calculate_wave_function_overlap(geometry)
-        
-        # Electronic structure of 3D metamaterial
-        electronic_structure = self._calculate_electronic_structure(geometry)
-        
-        # Quantum mechanical stress distribution
-        stress_distribution = self._quantum_stress_analysis(geometry)
-        
-        # Tunneling effects for defect healing
-        tunneling_analysis = self._analyze_quantum_tunneling(geometry)
-        
-        return {
-            'confinement_energy': confinement_energy,
-            'wave_function_overlap': wave_function_overlap,
-            'electronic_structure': electronic_structure,
-            'stress_distribution': stress_distribution,
-            'tunneling_analysis': tunneling_analysis,
-            'quantum_coherence_scale': self.quantum_limits['coherence_length'],
-            'modeling_fidelity': 0.98
-        }
+        logger.info("Quantum Mechanical Model initialized")
     
-    def _calculate_quantum_confinement(self, geometry: MetamaterialGeometry) -> Dict:
-        """Calculate quantum confinement effects in monolayer struts"""
+    def calculate_electronic_structure(self, params: GrapheneMetamaterialParameters) -> Dict:
+        """Calculate electronic band structure for metamaterial"""
+        logger.info("Calculating electronic structure...")
         
-        # Quantum well model for monolayer confinement
-        strut_thickness = 3.35e-10  # Single layer graphene thickness
+        # Effective lattice parameter for metamaterial
+        effective_lattice = params.unit_cell_size_nm * 1e-9  # Convert to meters
         
-        # Energy levels in quantum well
-        n_levels = 3  # Number of confined states
-        energy_levels = []
+        # Number of graphene unit cells in metamaterial unit cell
+        graphene_unit_cell = 0.246e-9  # m (graphene lattice parameter)
+        cells_per_strut = int(effective_lattice / graphene_unit_cell)
         
-        for n in range(1, n_levels + 1):
-            E_n = (n**2 * np.pi**2 * HBAR**2) / (2 * 9.109e-31 * strut_thickness**2)
-            energy_levels.append(E_n)
+        # Electronic bandwidth scaling
+        bandwidth_scaling = 1.0 / np.sqrt(cells_per_strut)
+        effective_hopping = self.hopping_energy_ev * bandwidth_scaling
         
-        # Golden ratio enhancement for quantum states
-        phi_enhanced_levels = [E * (self.phi ** (n-1)) for n, E in enumerate(energy_levels, 1)]
-        
-        # Fermi energy modification
-        fermi_energy_shift = self._calculate_fermi_energy_shift(geometry)
-        
-        return {
-            'energy_levels': energy_levels,
-            'phi_enhanced_levels': phi_enhanced_levels,
-            'fermi_energy_shift': fermi_energy_shift,
-            'confinement_strength': energy_levels[0] / (KB * 300),  # in units of kT
-            'quantum_size_effect': strut_thickness / self.quantum_limits['coherence_length']
-        }
-    
-    def _calculate_wave_function_overlap(self, geometry: MetamaterialGeometry) -> Dict:
-        """Calculate wave function overlap for carbon-carbon bonding"""
-        
-        # sp² hybrid orbital wave functions
-        def sp2_orbital(r, theta, phi):
-            # Simplified sp² orbital (actual calculation would be more complex)
-            r0 = self.graphene_props.carbon_carbon_bond
-            return np.exp(-r/r0) * np.cos(theta)**2
-        
-        # Calculate overlap integrals
-        bond_angles = np.array([0, 2*np.pi/3, 4*np.pi/3])  # 120° spacing
-        overlap_integrals = []
-        
-        for angle in bond_angles:
-            # Numerical integration of overlap
-            r_points = np.linspace(0, 5e-10, 100)
-            overlap = 0
-            for r in r_points:
-                overlap += sp2_orbital(r, 0, 0) * sp2_orbital(r, 0, angle) * r**2
-            overlap_integrals.append(overlap * 4 * np.pi / len(r_points))
-        
-        # Average overlap with golden ratio weighting
-        weighted_overlap = sum(self.phi**i * overlap for i, overlap in enumerate(overlap_integrals))
-        weighted_overlap /= sum(self.phi**i for i in range(len(overlap_integrals)))
-        
-        return {
-            'bond_overlap_integrals': overlap_integrals,
-            'average_overlap': np.mean(overlap_integrals),
-            'phi_weighted_overlap': weighted_overlap,
-            'bonding_strength': weighted_overlap / overlap_integrals[0],
-            'hybridization_quality': min(overlap_integrals) / max(overlap_integrals)
-        }
-    
-    def _calculate_electronic_structure(self, geometry: MetamaterialGeometry) -> Dict:
-        """Calculate electronic structure of 3D graphene metamaterial"""
-        
-        # Tight-binding model for 3D network
-        def tight_binding_hamiltonian(k_vector, t_hopping=2.7 * E_CHARGE):
-            """Tight-binding Hamiltonian for 3D graphene network"""
-            kx, ky, kz = k_vector
-            
-            # Modified dispersion for 3D network
-            a = self.graphene_props.lattice_constant
-            
-            # In-plane graphene dispersion
-            f_xy = np.exp(1j * kx * a) + np.exp(1j * ky * a) + np.exp(1j * (kx + ky) * a)
-            
-            # Out-of-plane coupling (weaker)
-            f_z = np.cos(kz * geometry.unit_cell_size)
-            
-            # 3D Hamiltonian matrix
-            H = np.array([
-                [0, t_hopping * f_xy + 0.1 * t_hopping * f_z],
-                [t_hopping * np.conj(f_xy) + 0.1 * t_hopping * f_z, 0]
-            ])
-            
-            return H
-        
-        # Calculate band structure
-        k_points = np.linspace(-np.pi, np.pi, 50)
-        band_energies = []
-        
-        for kx in k_points[::5]:  # Sample subset for efficiency
-            for ky in k_points[::5]:
-                for kz in k_points[::5]:
-                    H = tight_binding_hamiltonian([kx, ky, kz])
-                    eigenvals = np.linalg.eigvals(H)
-                    band_energies.extend(eigenvals)
-        
-        band_energies = np.array(band_energies)
-        
-        # Density of states
-        energy_bins = np.linspace(np.min(band_energies), np.max(band_energies), 100)
-        dos, _ = np.histogram(np.real(band_energies), bins=energy_bins)
-        
-        # Band gap analysis
-        fermi_level = 0  # Intrinsic graphene
-        conduction_band = band_energies[np.real(band_energies) > fermi_level]
-        valence_band = band_energies[np.real(band_energies) < fermi_level]
-        
-        band_gap = np.min(np.real(conduction_band)) - np.max(np.real(valence_band))
-        
-        return {
-            'band_energies': band_energies,
-            'density_of_states': dos,
-            'energy_bins': energy_bins,
-            'band_gap': band_gap,
-            'fermi_velocity_3d': self.graphene_props.fermi_velocity * geometry.connectivity / 3,
-            'electronic_conductivity': self._calculate_conductivity(dos, energy_bins)
-        }
-    
-    def _quantum_stress_analysis(self, geometry: MetamaterialGeometry) -> Dict:
-        """Quantum mechanical stress distribution analysis"""
-        
-        # Quantum stress tensor components
-        def quantum_stress_tensor(position, quantum_params):
-            """Calculate quantum stress at given position"""
-            x, y, z = position
-            
-            # Kinetic energy contribution
-            kinetic_stress = (HBAR**2 / (2 * 9.109e-31)) * quantum_params.wave_function_coherence
-            
-            # Exchange-correlation stress
-            xc_stress = 0.1 * kinetic_stress  # Simplified approximation
-            
-            # Strain-induced modifications
-            strain_factor = 1 + 0.1 * np.sin(2*np.pi*x/geometry.unit_cell_size)
-            
-            # Stress tensor (simplified diagonal form)
-            stress_tensor = np.diag([kinetic_stress, kinetic_stress, 0.1*kinetic_stress]) * strain_factor
-            
-            return stress_tensor
-        
-        # Calculate stress distribution across unit cell
-        grid_points = 10
-        x_points = np.linspace(0, geometry.unit_cell_size, grid_points)
-        y_points = np.linspace(0, geometry.unit_cell_size, grid_points)
-        z_points = np.linspace(0, geometry.strut_width, 3)
-        
-        stress_field = []
-        max_stress = 0
-        
-        quantum_params = QuantumParameters(
-            wave_function_coherence=0.95,
-            tunneling_probability=0.1,
-            quantum_confinement_energy=0.1 * E_CHARGE,
-            decoherence_time=1e-12,
-            entanglement_fidelity=0.9
+        # Quantum confinement effects in struts
+        confinement_energy = (self.hbar * np.pi)**2 / (
+            2 * self.electron_mass * (params.strut_width_monolayers * GRAPHENE_LAYER_SPACING * 1e-9)**2
         )
+        confinement_energy_ev = confinement_energy / self.electron_charge
         
-        for x in x_points[::2]:  # Sample subset
-            for y in y_points[::2]:
-                for z in z_points:
-                    stress = quantum_stress_tensor([x, y, z], quantum_params)
-                    stress_magnitude = np.linalg.norm(stress)
-                    stress_field.append(stress_magnitude)
-                    max_stress = max(max_stress, stress_magnitude)
+        # Band gap opening due to confinement and curvature
+        curvature_energy = 0.1 * effective_hopping  # Approximate curvature effect
+        band_gap_ev = confinement_energy_ev + curvature_energy
         
-        # Golden ratio stress enhancement
-        phi_enhanced_stress = max_stress * self.phi
+        # Density of states at Fermi level
+        dos_fermi = 2 * cells_per_strut / (np.pi * (self.hbar * self.fermi_velocity)**2)
         
         return {
-            'stress_field': np.array(stress_field),
-            'max_stress': max_stress,
-            'phi_enhanced_stress': phi_enhanced_stress,
-            'stress_uniformity': np.std(stress_field) / np.mean(stress_field),
-            'quantum_stress_contribution': max_stress / self.targets['tensile_strength']
+            'effective_hopping_ev': effective_hopping,
+            'band_gap_ev': band_gap_ev,
+            'confinement_energy_ev': confinement_energy_ev,
+            'density_of_states_fermi': dos_fermi,
+            'bandwidth_scaling': bandwidth_scaling,
+            'electronic_conductivity_s_m': self._calculate_conductivity(effective_hopping, band_gap_ev)
         }
     
-    def _analyze_quantum_tunneling(self, geometry: MetamaterialGeometry) -> Dict:
-        """Analyze quantum tunneling effects for defect healing"""
+    def _calculate_conductivity(self, hopping_ev: float, band_gap_ev: float) -> float:
+        """Calculate electrical conductivity from electronic structure"""
+        # Boltzmann conductivity for gapped system
+        thermal_energy_ev = 0.026  # kT at room temperature
         
-        # Tunneling probability calculation
-        def tunneling_probability(barrier_height, barrier_width, particle_energy):
-            """Calculate quantum tunneling probability"""
-            if particle_energy >= barrier_height:
-                return 1.0
-            
-            # WKB approximation
-            kappa = np.sqrt(2 * 9.109e-31 * (barrier_height - particle_energy)) / HBAR
-            transmission = np.exp(-2 * kappa * barrier_width)
-            
-            return transmission
+        if band_gap_ev > 0.1:  # Semiconducting
+            conductivity = 1e4 * np.exp(-band_gap_ev / (2 * thermal_energy_ev))
+        else:  # Metallic
+            conductivity = 1e6 * hopping_ev / 2.8  # Scale by hopping strength
         
-        # Defect healing scenarios
-        defect_types = {
-            'vacancy': {'barrier_height': 0.5 * E_CHARGE, 'barrier_width': 5e-10},
-            'interstitial': {'barrier_height': 0.3 * E_CHARGE, 'barrier_width': 3e-10},
-            'substitution': {'barrier_height': 0.7 * E_CHARGE, 'barrier_width': 4e-10}
-        }
-        
-        thermal_energy = KB * 300  # Room temperature
-        tunneling_results = {}
-        
-        for defect_type, params in defect_types.items():
-            prob = tunneling_probability(
-                params['barrier_height'],
-                params['barrier_width'],
-                thermal_energy
-            )
-            
-            # Golden ratio enhancement for tunneling
-            phi_enhanced_prob = min(1.0, prob * self.phi)
-            
-            tunneling_results[defect_type] = {
-                'base_probability': prob,
-                'phi_enhanced_probability': phi_enhanced_prob,
-                'healing_time': 1e-12 / phi_enhanced_prob if phi_enhanced_prob > 0 else np.inf,
-                'activation_barrier': params['barrier_height'] / E_CHARGE
-            }
-        
-        # Overall defect healing capability
-        average_healing_prob = np.mean([result['phi_enhanced_probability'] 
-                                      for result in tunneling_results.values()])
-        
-        return {
-            'defect_healing_probabilities': tunneling_results,
-            'average_healing_probability': average_healing_prob,
-            'quantum_healing_enabled': average_healing_prob > 0.1,
-            'healing_timescale': 1e-12 / average_healing_prob if average_healing_prob > 0 else np.inf
-        }
+        return conductivity
     
-    def defect_free_assembly_protocol(self, geometry: MetamaterialGeometry) -> Dict:
-        """Revolutionary defect-free assembly protocol"""
+    def calculate_van_der_waals_interactions(self, params: GrapheneMetamaterialParameters) -> Dict:
+        """Model van der Waals interactions between graphene layers"""
+        logger.info("Calculating van der Waals interactions...")
         
-        self.logger.info("Developing defect-free assembly protocol")
+        # London dispersion forces between graphene layers
+        c6_coefficient = 15.7  # eV⋅Å⁶ for graphene-graphene interaction
+        layer_separation_angstrom = GRAPHENE_LAYER_SPACING * 10  # Convert nm to Å
         
-        # Multi-stage assembly process
-        assembly_stages = {
-            'nucleation': self._nucleation_stage_design(geometry),
-            'growth': self._growth_stage_optimization(geometry),
-            'annealing': self._quantum_annealing_protocol(geometry),
-            'validation': self._defect_detection_protocol(geometry)
-        }
+        # van der Waals energy per unit area
+        vdw_energy_per_area = -c6_coefficient / layer_separation_angstrom**6  # eV/Å²
         
-        # Thermodynamic assembly conditions
-        optimal_conditions = self._optimize_assembly_conditions(geometry)
+        # Total binding energy for strut
+        strut_area_angstrom2 = (params.strut_width_monolayers * params.unit_cell_size_nm * 10)**2
+        total_vdw_energy_ev = vdw_energy_per_area * strut_area_angstrom2
         
-        # Kinetic pathway optimization
-        kinetic_pathways = self._analyze_kinetic_pathways(geometry)
+        # Inter-layer coupling strength
+        coupling_strength = params.van_der_waals_coupling * abs(total_vdw_energy_ev)
         
-        # Error correction protocols
-        error_correction = self._quantum_error_correction(geometry)
-        
-        # Assembly success prediction
-        success_probability = self._predict_assembly_success(
-            assembly_stages, optimal_conditions, kinetic_pathways, error_correction
-        )
+        # Thermal stability assessment
+        thermal_energy_ev = BOLTZMANN_CONSTANT * params.assembly_temperature_k / self.electron_charge
+        stability_ratio = coupling_strength / thermal_energy_ev
         
         return {
-            'assembly_stages': assembly_stages,
-            'optimal_conditions': optimal_conditions,
-            'kinetic_pathways': kinetic_pathways,
-            'error_correction': error_correction,
+            'vdw_energy_per_area_ev_ang2': vdw_energy_per_area,
+            'total_vdw_energy_ev': total_vdw_energy_ev,
+            'coupling_strength_ev': coupling_strength,
+            'thermal_stability_ratio': stability_ratio,
+            'thermally_stable': stability_ratio > 10.0  # Require 10× thermal energy
+        }
+
+class DefectFreeAssemblyProtocol:
+    """Revolutionary assembly protocols for defect-free 3D structures"""
+    
+    def __init__(self):
+        self.assembly_strategies = [
+            'bottom_up_synthesis',
+            'template_directed_assembly', 
+            'self_assembly_thermodynamic',
+            'directed_self_assembly_kinetic',
+            'layer_by_layer_controlled'
+        ]
+        
+        logger.info("Defect-Free Assembly Protocol initialized")
+    
+    def design_assembly_pathway(self, params: GrapheneMetamaterialParameters) -> Dict:
+        """Design optimal assembly pathway for defect-free structures"""
+        logger.info(f"Designing assembly pathway for {params.lattice_type} lattice...")
+        
+        # Analyze thermodynamic vs kinetic control requirements
+        assembly_analysis = self._analyze_assembly_requirements(params)
+        
+        # Select optimal assembly strategy
+        optimal_strategy = self._select_assembly_strategy(params, assembly_analysis)
+        
+        # Design step-by-step assembly protocol
+        assembly_steps = self._generate_assembly_steps(params, optimal_strategy)
+        
+        # Calculate assembly success probability
+        success_probability = self._calculate_assembly_success(params, assembly_steps)
+        
+        return {
+            'optimal_strategy': optimal_strategy,
+            'assembly_steps': assembly_steps,
+            'assembly_analysis': assembly_analysis,
             'success_probability': success_probability,
-            'defect_density_prediction': 1e-12 * (1 - success_probability),
-            'protocol_validated': success_probability > 0.999
+            'critical_control_parameters': self._identify_critical_parameters(params),
+            'defect_prevention_protocols': self._design_defect_prevention(params)
         }
     
-    def _nucleation_stage_design(self, geometry: MetamaterialGeometry) -> Dict:
-        """Design nucleation stage for defect-free initiation"""
+    def _analyze_assembly_requirements(self, params: GrapheneMetamaterialParameters) -> Dict:
+        """Analyze thermodynamic and kinetic requirements"""
+        # Thermodynamic stability analysis
+        formation_energy_per_node = 2.5  # eV (estimated for graphene node formation)
+        nodes_per_unit_cell = self._calculate_nodes_per_unit_cell(params.lattice_type)
+        total_formation_energy = formation_energy_per_node * nodes_per_unit_cell
         
-        # Critical nucleus size
-        surface_energy = 1.5  # J/m² (graphene edge energy)
-        bulk_energy = -0.1 * E_CHARGE  # Stabilization energy
+        # Kinetic barriers for assembly
+        diffusion_barrier_ev = 0.5  # Surface diffusion barrier
+        nucleation_barrier_ev = 1.2  # Critical nucleus formation
         
-        critical_radius = 2 * surface_energy / abs(bulk_energy)
-        critical_atoms = int(np.pi * critical_radius**2 / (self.graphene_props.lattice_constant**2))
-        
-        # Nucleation barriers
-        nucleation_barrier = (16 * np.pi * surface_energy**3) / (3 * bulk_energy**2)
-        nucleation_rate = 1e12 * np.exp(-nucleation_barrier / (KB * 300))
-        
-        # Golden ratio optimization
-        phi_optimized_rate = nucleation_rate * self.phi
+        # Assembly temperature requirements
+        min_temperature_k = max(
+            diffusion_barrier_ev * self.electron_charge / (10 * BOLTZMANN_CONSTANT),
+            nucleation_barrier_ev * self.electron_charge / (5 * BOLTZMANN_CONSTANT)
+        )
         
         return {
-            'critical_radius': critical_radius,
-            'critical_atoms': critical_atoms,
-            'nucleation_barrier': nucleation_barrier,
-            'nucleation_rate': nucleation_rate,
-            'phi_optimized_rate': phi_optimized_rate,
-            'nucleation_time': 1 / phi_optimized_rate,
-            'defect_probability': np.exp(-phi_optimized_rate * 1e-9)
+            'formation_energy_ev': total_formation_energy,
+            'diffusion_barrier_ev': diffusion_barrier_ev,
+            'nucleation_barrier_ev': nucleation_barrier_ev,
+            'minimum_temperature_k': min_temperature_k,
+            'temperature_adequate': params.assembly_temperature_k >= min_temperature_k,
+            'thermodynamic_stability': total_formation_energy < 0,  # Negative = stable
+            'kinetic_accessibility': params.assembly_temperature_k > min_temperature_k
         }
     
-    def _growth_stage_optimization(self, geometry: MetamaterialGeometry) -> Dict:
-        """Optimize growth stage for defect prevention"""
+    def _calculate_nodes_per_unit_cell(self, lattice_type: str) -> int:
+        """Calculate number of nodes per unit cell for different lattices"""
+        node_counts = {
+            'cubic': 8,      # Simple cubic
+            'bcc': 9,        # Body-centered cubic  
+            'fcc': 14,       # Face-centered cubic
+            'octet': 16      # Octet truss (most complex)
+        }
+        return node_counts.get(lattice_type, 8)
+    
+    def _select_assembly_strategy(self, params: GrapheneMetamaterialParameters, 
+                                analysis: Dict) -> str:
+        """Select optimal assembly strategy based on requirements"""
+        # Decision logic based on complexity and requirements
+        if params.unit_cell_size_nm < 10:
+            return 'bottom_up_synthesis'  # Small scale, precise control
+        elif analysis['kinetic_accessibility'] and params.defect_tolerance < 1e-8:
+            return 'directed_self_assembly_kinetic'  # Ultra-low defects
+        elif params.lattice_type in ['fcc', 'octet']:
+            return 'template_directed_assembly'  # Complex geometries
+        else:
+            return 'self_assembly_thermodynamic'  # General purpose
+    
+    def _generate_assembly_steps(self, params: GrapheneMetamaterialParameters, 
+                               strategy: str) -> List[Dict]:
+        """Generate detailed assembly steps for chosen strategy"""
+        base_steps = [
+            {
+                'step': 1,
+                'operation': 'substrate_preparation',
+                'description': 'Prepare atomically clean substrate with defined nucleation sites',
+                'temperature_k': params.assembly_temperature_k * 0.8,
+                'duration_hours': 2,
+                'success_criteria': 'Atomically flat surface with <0.1 nm roughness'
+            },
+            {
+                'step': 2, 
+                'operation': 'precursor_deposition',
+                'description': 'Controlled deposition of graphene precursor materials',
+                'temperature_k': params.assembly_temperature_k * 0.9,
+                'duration_hours': 4,
+                'success_criteria': 'Uniform precursor coverage with controlled thickness'
+            }
+        ]
         
-        # Growth kinetics
-        attachment_rate = 1e6  # atoms/s
-        detachment_rate = 1e3  # atoms/s
+        # Strategy-specific steps
+        if strategy == 'bottom_up_synthesis':
+            specific_steps = [
+                {
+                    'step': 3,
+                    'operation': 'bottom_up_growth',
+                    'description': 'Atom-by-atom assembly with real-time monitoring',
+                    'temperature_k': params.assembly_temperature_k,
+                    'duration_hours': 12,
+                    'success_criteria': 'Defect-free growth with <1 defect per 10⁶ atoms'
+                }
+            ]
+        elif strategy == 'directed_self_assembly_kinetic':
+            specific_steps = [
+                {
+                    'step': 3,
+                    'operation': 'kinetic_control_assembly',
+                    'description': 'Kinetically controlled assembly with dynamic feedback',
+                    'temperature_k': params.assembly_temperature_k,
+                    'duration_hours': 8,
+                    'success_criteria': 'Kinetic pathway selection for defect-free assembly'
+                }
+            ]
+        else:
+            specific_steps = [
+                {
+                    'step': 3,
+                    'operation': 'thermodynamic_assembly',
+                    'description': 'Thermodynamically driven self-assembly process',
+                    'temperature_k': params.assembly_temperature_k,
+                    'duration_hours': 6,
+                    'success_criteria': 'Thermodynamic equilibrium with target structure'
+                }
+            ]
         
-        # Net growth rate
-        net_growth_rate = attachment_rate - detachment_rate
+        # Final steps common to all strategies
+        final_steps = [
+            {
+                'step': 4,
+                'operation': 'structure_validation',
+                'description': 'Real-time structure validation and defect detection',
+                'temperature_k': params.assembly_temperature_k,
+                'duration_hours': 1,
+                'success_criteria': 'Structure matches design within tolerances'
+            },
+            {
+                'step': 5,
+                'operation': 'defect_correction',
+                'description': 'Active defect correction and structure optimization',
+                'temperature_k': params.assembly_temperature_k * 1.1,
+                'duration_hours': 2,
+                'success_criteria': 'Defect density below tolerance limit'
+            }
+        ]
         
-        # Defect incorporation probability
-        defect_incorporation = 1e-6  # per atom added
+        return base_steps + specific_steps + final_steps
+    
+    def _calculate_assembly_success(self, params: GrapheneMetamaterialParameters,
+                                  assembly_steps: List[Dict]) -> float:
+        """Calculate overall assembly success probability"""
+        # Individual step success probabilities
+        step_success_rates = {
+            'substrate_preparation': 0.95,
+            'precursor_deposition': 0.90,
+            'bottom_up_growth': 0.70,
+            'kinetic_control_assembly': 0.75,
+            'thermodynamic_assembly': 0.80,
+            'template_directed_assembly': 0.85,
+            'structure_validation': 0.98,
+            'defect_correction': 0.85
+        }
         
-        # Growth optimization with golden ratio
-        phi_growth_rate = net_growth_rate * self.phi
-        phi_defect_suppression = defect_incorporation / self.phi
+        # Calculate overall probability (product of individual probabilities)
+        overall_success = 1.0
+        for step in assembly_steps:
+            step_probability = step_success_rates.get(step['operation'], 0.8)
+            
+            # Temperature dependence
+            temp_factor = min(1.0, params.assembly_temperature_k / 1000.0)
+            adjusted_probability = step_probability * temp_factor
+            
+            overall_success *= adjusted_probability
         
-        # Growth time estimation
-        total_atoms = int(geometry.unit_cell_size**3 / (self.graphene_props.lattice_constant**3))
-        growth_time = total_atoms / phi_growth_rate
+        # Defect tolerance bonus
+        if params.defect_tolerance > 1e-7:
+            defect_tolerance_bonus = 1.1
+        else:
+            defect_tolerance_bonus = 1.0
         
+        final_success = min(0.95, overall_success * defect_tolerance_bonus)
+        return final_success
+    
+    def _identify_critical_parameters(self, params: GrapheneMetamaterialParameters) -> Dict:
+        """Identify critical control parameters for assembly"""
         return {
-            'attachment_rate': attachment_rate,
-            'detachment_rate': detachment_rate,
-            'net_growth_rate': net_growth_rate,
-            'phi_optimized_growth': phi_growth_rate,
-            'defect_incorporation': defect_incorporation,
-            'phi_defect_suppression': phi_defect_suppression,
-            'growth_time': growth_time,
-            'growth_quality': 1 - phi_defect_suppression * total_atoms
+            'temperature_control': f"±{0.1 * params.assembly_temperature_k:.1f} K",
+            'pressure_control': "Ultra-high vacuum <10⁻¹⁰ Torr",
+            'precursor_purity': ">99.999% carbon purity",
+            'surface_cleanliness': "Atomically clean substrate",
+            'growth_rate_control': "0.1-1.0 monolayers/hour",
+            'real_time_monitoring': "In-situ STM/AFM with atomic resolution",
+            'defect_detection_sensitivity': f"<{params.defect_tolerance:.0e} defects/nm³"
         }
     
-    def _quantum_annealing_protocol(self, geometry: MetamaterialGeometry) -> Dict:
-        """Quantum annealing protocol for defect healing"""
-        
-        # Annealing schedule
-        initial_temp = 1000  # K
-        final_temp = 300    # K
-        annealing_time = 3600  # s
-        
-        # Quantum annealing enhancement
-        def annealing_schedule(t):
-            """Time-dependent annealing schedule"""
-            return final_temp + (initial_temp - final_temp) * np.exp(-t * self.phi / annealing_time)
-        
-        # Defect healing rates
-        time_points = np.linspace(0, annealing_time, 100)
-        healing_rates = []
-        
-        for t in time_points:
-            temp = annealing_schedule(t)
-            rate = 1e12 * np.exp(-0.5 * E_CHARGE / (KB * temp))
-            healing_rates.append(rate)
-        
-        total_healing = np.trapz(healing_rates, time_points)
-        
+    def _design_defect_prevention(self, params: GrapheneMetamaterialParameters) -> Dict:
+        """Design comprehensive defect prevention protocols"""
         return {
-            'annealing_schedule': annealing_schedule,
-            'initial_temp': initial_temp,
-            'final_temp': final_temp,
-            'annealing_time': annealing_time,
-            'healing_rates': healing_rates,
-            'total_healing': total_healing,
-            'defect_reduction_factor': 1 / (1 + total_healing * 1e-12),
-            'annealing_success': total_healing > 1e9
+            'material_purity_control': {
+                'carbon_source_purity': ">99.999%",
+                'impurity_monitoring': "Real-time mass spectrometry",
+                'contamination_prevention': "Sealed ultra-clean environment"
+            },
+            'process_control': {
+                'temperature_uniformity': "±0.1 K across substrate",
+                'pressure_stability': "±1% pressure variation",
+                'flow_rate_control': "±0.1% precursor flow stability"
+            },
+            'real_time_correction': {
+                'defect_detection': "Continuous atomic-resolution monitoring", 
+                'active_correction': "Real-time defect healing protocols",
+                'feedback_control': "Adaptive process parameter adjustment"
+            },
+            'quality_assurance': {
+                'in_situ_characterization': "STM, AFM, LEED, XPS analysis",
+                'statistical_process_control': "6-sigma quality protocols",
+                'batch_validation': "Complete structural characterization"
+            }
         }
+
+class TheoreticalPerformancePredictor:
+    """Theoretical framework for predicting material properties"""
     
-    def _defect_detection_protocol(self, geometry: MetamaterialGeometry) -> Dict:
-        """Advanced defect detection and validation protocol"""
+    def __init__(self):
+        # Reference properties for pristine graphene
+        self.graphene_modulus_tpa = 1.0      # TPa (in-plane)
+        self.graphene_strength_gpa = 130.0   # GPa
+        self.graphene_density = 2200.0       # kg/m³
         
-        # Detection methods
-        detection_methods = {
-            'electron_microscopy': {'resolution': 1e-10, 'sensitivity': 0.99},
-            'raman_spectroscopy': {'resolution': 1e-9, 'sensitivity': 0.95},
-            'xray_diffraction': {'resolution': 1e-9, 'sensitivity': 0.90},
-            'quantum_sensing': {'resolution': 1e-11, 'sensitivity': 0.999}
-        }
-        
-        # Combined detection capability
-        combined_sensitivity = 1 - np.prod([1 - method['sensitivity'] 
-                                          for method in detection_methods.values()])
-        
-        # Golden ratio enhancement
-        phi_enhanced_sensitivity = min(1.0, combined_sensitivity * self.phi)
-        
-        # Defect classification capability
-        defect_classification = {
-            'vacancy': 0.99,
-            'interstitial': 0.95,
-            'substitution': 0.90,
-            'grain_boundary': 0.85,
-            'dislocation': 0.80
-        }
-        
-        return {
-            'detection_methods': detection_methods,
-            'combined_sensitivity': combined_sensitivity,
-            'phi_enhanced_sensitivity': phi_enhanced_sensitivity,
-            'defect_classification': defect_classification,
-            'validation_confidence': phi_enhanced_sensitivity,
-            'protocol_validated': phi_enhanced_sensitivity > 0.999
-        }
+        logger.info("Theoretical Performance Predictor initialized")
     
-    def theoretical_performance_prediction(self, geometry: MetamaterialGeometry) -> Dict:
-        """Theoretical prediction of 130 GPa strength and 1 TPa modulus"""
+    def predict_mechanical_properties(self, params: GrapheneMetamaterialParameters,
+                                    quantum_results: Dict) -> TheoreticalProperties:
+        """Predict mechanical properties from structure and quantum mechanics"""
+        logger.info("Predicting mechanical properties...")
         
-        self.logger.info("Predicting theoretical performance limits")
+        # Effective density based on porosity
+        porosity = self._calculate_porosity(params)
+        effective_density = self.graphene_density * (1 - porosity)
         
-        # Intrinsic graphene properties (monolayer)
-        intrinsic_strength = 130e9  # Pa
-        intrinsic_modulus = 1e12    # Pa (in-plane)
+        # In-plane modulus (parallel to graphene sheets)
+        in_plane_modulus = self._calculate_in_plane_modulus(params, quantum_results)
         
-        # 3D metamaterial scaling
-        relative_density = 1 - geometry.porosity
+        # Out-of-plane modulus (perpendicular to sheets)
+        out_of_plane_modulus = self._calculate_out_of_plane_modulus(params, quantum_results)
         
-        # Gibson-Ashby scaling for cellular materials
-        strength_scaling = relative_density ** 1.5
-        modulus_scaling = relative_density ** 2.0
+        # Ultimate tensile strength
+        tensile_strength = self._calculate_tensile_strength(params, quantum_results)
         
-        # Quantum enhancement factors
-        quantum_enhancement = self._calculate_quantum_enhancement(geometry)
+        # Shear modulus
+        shear_modulus = self._calculate_shear_modulus(in_plane_modulus, out_of_plane_modulus)
         
-        # Golden ratio optimization
-        phi_strength_factor = self.phi
-        phi_modulus_factor = self.phi ** 0.5
+        # Thermal and electrical properties
+        thermal_conductivity = self._calculate_thermal_conductivity(params, quantum_results)
+        electrical_conductivity = quantum_results['electronic_conductivity_s_m']
+        band_gap = quantum_results['band_gap_ev']
         
-        # Predicted properties
-        predicted_strength = (intrinsic_strength * strength_scaling * 
-                            quantum_enhancement['strength'] * phi_strength_factor)
-        
-        predicted_modulus = (intrinsic_modulus * modulus_scaling * 
-                           quantum_enhancement['modulus'] * phi_modulus_factor)
-        
-        # Defect corrections
-        defect_strength_reduction = 1 - geometry.porosity * 0.1  # Simplified model
-        defect_modulus_reduction = 1 - geometry.porosity * 0.05
-        
-        final_strength = predicted_strength * defect_strength_reduction
-        final_modulus = predicted_modulus * defect_modulus_reduction
-        
-        # Performance validation
-        strength_target_met = final_strength >= self.targets['tensile_strength']
-        modulus_target_met = final_modulus >= self.targets['youngs_modulus']
-        
-        return {
-            'intrinsic_properties': {
-                'strength': intrinsic_strength,
-                'modulus': intrinsic_modulus
-            },
-            'scaling_factors': {
-                'strength_scaling': strength_scaling,
-                'modulus_scaling': modulus_scaling,
-                'relative_density': relative_density
-            },
-            'quantum_enhancement': quantum_enhancement,
-            'golden_ratio_factors': {
-                'strength_factor': phi_strength_factor,
-                'modulus_factor': phi_modulus_factor
-            },
-            'predicted_properties': {
-                'strength': final_strength,
-                'modulus': final_modulus,
-                'specific_strength': final_strength / (2000 * relative_density),  # Assuming 2 g/cm³
-                'specific_modulus': final_modulus / (2000 * relative_density)
-            },
-            'target_validation': {
-                'strength_target_met': strength_target_met,
-                'modulus_target_met': modulus_target_met,
-                'strength_safety_factor': final_strength / self.targets['tensile_strength'],
-                'modulus_safety_factor': final_modulus / self.targets['youngs_modulus']
-            },
-            'performance_grade': 'EXCELLENT' if (strength_target_met and modulus_target_met) else
-                               'GOOD' if (strength_target_met or modulus_target_met) else 'MARGINAL'
-        }
+        return TheoreticalProperties(
+            in_plane_elastic_modulus_tpa=in_plane_modulus,
+            out_of_plane_elastic_modulus_tpa=out_of_plane_modulus,
+            ultimate_tensile_strength_gpa=tensile_strength,
+            shear_modulus_tpa=shear_modulus,
+            density_kg_m3=effective_density,
+            thermal_conductivity_w_mk=thermal_conductivity,
+            electrical_conductivity_s_m=electrical_conductivity,
+            band_gap_ev=band_gap
+        )
     
-    def _calculate_quantum_enhancement(self, geometry: MetamaterialGeometry) -> Dict:
-        """Calculate quantum mechanical enhancement factors"""
+    def _calculate_porosity(self, params: GrapheneMetamaterialParameters) -> float:
+        """Calculate effective porosity of metamaterial structure"""
+        # Volume fraction calculation based on lattice type
+        lattice_filling_factors = {
+            'cubic': 0.15,    # Simple cubic lattice
+            'bcc': 0.20,      # Body-centered cubic
+            'fcc': 0.25,      # Face-centered cubic  
+            'octet': 0.30     # Octet truss (highest density)
+        }
         
-        # Quantum size effects
-        quantum_size_factor = geometry.strut_width / 1e-9  # Normalized to 1 nm
+        base_filling = lattice_filling_factors[params.lattice_type]
+        
+        # Adjust for strut width
+        strut_factor = params.strut_width_monolayers / 5.0  # Normalize to 5 layers
+        adjusted_filling = base_filling * min(1.0, strut_factor)
+        
+        porosity = 1.0 - adjusted_filling
+        return porosity
+    
+    def _calculate_in_plane_modulus(self, params: GrapheneMetamaterialParameters,
+                                  quantum_results: Dict) -> float:
+        """Calculate in-plane elastic modulus"""
+        # Base modulus from graphene
+        base_modulus = self.graphene_modulus_tpa
         
         # Quantum confinement enhancement
-        confinement_enhancement = 1 + 0.5 * np.exp(-quantum_size_factor)
+        quantum_enhancement = 1.0 + 0.1 * quantum_results['confinement_energy_ev']
         
-        # Electronic structure modifications
-        bandgap_modification = 1 + 0.1 / (1 + quantum_size_factor)
+        # Structural efficiency factor
+        porosity = self._calculate_porosity(params)
+        structure_factor = (1 - porosity)**1.5  # Power law scaling
         
-        # Many-body effects
-        many_body_factor = 1 + 0.2 * np.log(1 + geometry.connectivity)
+        # Strut width effect (more layers = higher modulus)
+        strut_factor = np.sqrt(params.strut_width_monolayers)
         
-        # Overall quantum enhancement
-        strength_enhancement = confinement_enhancement * bandgap_modification
-        modulus_enhancement = confinement_enhancement * many_body_factor
-        
-        return {
-            'quantum_size_factor': quantum_size_factor,
-            'confinement_enhancement': confinement_enhancement,
-            'bandgap_modification': bandgap_modification,
-            'many_body_factor': many_body_factor,
-            'strength': strength_enhancement,
-            'modulus': modulus_enhancement
-        }
+        in_plane_modulus = base_modulus * quantum_enhancement * structure_factor * strut_factor
+        return min(in_plane_modulus, 1.5)  # Physical upper limit
     
-    def practical_manufacturing_pathway(self, geometry: MetamaterialGeometry) -> Dict:
-        """Develop practical manufacturing pathway for vessel-scale structures"""
+    def _calculate_out_of_plane_modulus(self, params: GrapheneMetamaterialParameters,
+                                       quantum_results: Dict) -> float:
+        """Calculate out-of-plane elastic modulus"""
+        # van der Waals coupling dominates out-of-plane properties
+        vdw_coupling = params.van_der_waals_coupling
+        base_out_of_plane = 0.03  # TPa (much lower than in-plane)
         
-        self.logger.info("Developing practical manufacturing pathway")
+        # Enhancement from multi-layer coupling
+        layer_enhancement = params.strut_width_monolayers**0.5
         
-        # Manufacturing stages
-        manufacturing_stages = {
-            'substrate_preparation': self._substrate_preparation_protocol(),
-            'template_fabrication': self._template_fabrication_method(geometry),
-            'graphene_synthesis': self._graphene_synthesis_protocol(),
-            'assembly_process': self._metamaterial_assembly_process(geometry),
-            'quality_control': self._manufacturing_quality_control()
-        }
+        # Structural connectivity
+        porosity = self._calculate_porosity(params)
+        connectivity_factor = (1 - porosity)**2
         
-        # Scale-up analysis
-        scale_up = self._analyze_manufacturing_scale_up(geometry)
-        
-        # Cost and timeline estimation
-        cost_analysis = self._manufacturing_cost_analysis(geometry)
-        
-        # Technology readiness assessment
-        technology_readiness = self._assess_technology_readiness()
-        
-        return {
-            'manufacturing_stages': manufacturing_stages,
-            'scale_up_analysis': scale_up,
-            'cost_analysis': cost_analysis,
-            'technology_readiness': technology_readiness,
-            'pathway_validated': technology_readiness['overall_trl'] >= 5,
-            'implementation_timeline': cost_analysis['development_time']
-        }
+        out_of_plane_modulus = base_out_of_plane * vdw_coupling * layer_enhancement * connectivity_factor
+        return min(out_of_plane_modulus, 0.2)  # Physical upper limit
     
-    def _substrate_preparation_protocol(self) -> Dict:
-        """Substrate preparation for graphene metamaterial growth"""
-        return {
-            'substrate_material': 'silicon_carbide',
-            'surface_preparation': 'hydrogen_etching',
-            'temperature': 1200,  # K
-            'vacuum_level': 1e-9,  # Pa
-            'preparation_time': 3600,  # s
-            'surface_quality': 0.99
-        }
-    
-    def _template_fabrication_method(self, geometry: MetamaterialGeometry) -> Dict:
-        """Template fabrication for 3D structure"""
-        return {
-            'method': 'multi_photon_lithography',
-            'resolution': 50e-9,  # m
-            'feature_size': geometry.strut_width,
-            'template_material': 'photoresist_polymer',
-            'fabrication_time': 86400,  # s (24 hours)
-            'template_fidelity': 0.95
-        }
-    
-    def _graphene_synthesis_protocol(self) -> Dict:
-        """Graphene synthesis protocol"""
-        return {
-            'method': 'chemical_vapor_deposition',
-            'precursor': 'methane',
-            'temperature': 1000,  # K
-            'pressure': 1e-3,  # Pa
-            'growth_rate': 1e-9,  # m/s
-            'quality_factor': 0.98
-        }
-    
-    def _metamaterial_assembly_process(self, geometry: MetamaterialGeometry) -> Dict:
-        """Metamaterial assembly process"""
+    def _calculate_tensile_strength(self, params: GrapheneMetamaterialParameters,
+                                  quantum_results: Dict) -> float:
+        """Calculate ultimate tensile strength"""
+        # Base strength from graphene
+        base_strength = self.graphene_strength_gpa
         
-        assembly_time = geometry.unit_cell_size**3 / (1e-9 * 1e-6)  # Rough estimate
+        # Quantum enhancement from confinement
+        quantum_factor = 1.0 + 0.05 * quantum_results['confinement_energy_ev']
         
-        return {
-            'assembly_method': 'directed_self_assembly',
-            'temperature': 500,  # K
-            'assembly_time': assembly_time,
-            'yield_rate': 0.90,
-            'defect_rate': 1e-6,
-            'assembly_fidelity': 0.99
-        }
+        # Defect sensitivity (strength scales with defect density)
+        defect_factor = 1.0 - 1000 * params.defect_tolerance
+        defect_factor = max(0.1, defect_factor)  # Minimum 10% of pristine strength
+        
+        # Size effect (smaller features are stronger)
+        size_factor = 1.0 + 1.0 / params.unit_cell_size_nm
+        
+        # Porosity effect on strength
+        porosity = self._calculate_porosity(params)
+        porosity_factor = (1 - porosity)**1.2
+        
+        tensile_strength = base_strength * quantum_factor * defect_factor * size_factor * porosity_factor
+        return tensile_strength
     
-    def comprehensive_validation_suite(self) -> Dict:
-        """Comprehensive validation of graphene metamaterial framework"""
+    def _calculate_shear_modulus(self, in_plane_modulus: float, out_of_plane_modulus: float) -> float:
+        """Calculate shear modulus from elastic moduli"""
+        # Geometric mean of in-plane and out-of-plane moduli
+        shear_modulus = np.sqrt(in_plane_modulus * out_of_plane_modulus) * 0.4
+        return shear_modulus
+    
+    def _calculate_thermal_conductivity(self, params: GrapheneMetamaterialParameters,
+                                      quantum_results: Dict) -> float:
+        """Calculate thermal conductivity"""
+        # Graphene has exceptional thermal conductivity ~5000 W/m⋅K
+        base_conductivity = 5000.0
         
-        # Test geometry
-        test_geometry = MetamaterialGeometry(
-            unit_cell_size=1e-6,     # 1 μm
-            strut_width=3.35e-10,    # Single layer graphene
-            connectivity=6,          # Hexagonal coordination
-            porosity=0.8,           # 80% void space
-            lattice_type='tetrahedral',
-            hierarchical_levels=2
+        # Reduction due to porosity and interfaces
+        porosity = self._calculate_porosity(params)
+        porosity_factor = (1 - porosity)**1.3
+        
+        # Band gap effect (electronic contribution)
+        if quantum_results['band_gap_ev'] > 0.1:
+            electronic_factor = 0.1  # Semiconducting
+        else:
+            electronic_factor = 1.0  # Metallic
+        
+        # Strut width effect (more layers = better conduction)
+        strut_factor = np.sqrt(params.strut_width_monolayers / 3.0)
+        
+        thermal_conductivity = base_conductivity * porosity_factor * electronic_factor * strut_factor
+        return thermal_conductivity
+
+class GrapheneMetamaterialFramework:
+    """Complete theoretical framework for graphene metamaterials"""
+    
+    def __init__(self):
+        self.quantum_model = QuantumMechanicalModel()
+        self.assembly_protocol = DefectFreeAssemblyProtocol()
+        self.performance_predictor = TheoreticalPerformancePredictor()
+        
+        logger.info("Graphene Metamaterial Framework initialized")
+    
+    def design_ultimate_metamaterial(self, target_strength_gpa: float = 130.0,
+                                   target_modulus_tpa: float = 1.0,
+                                   max_density_kg_m3: float = 500.0) -> Dict:
+        """Design graphene metamaterial for ultimate performance"""
+        logger.info(f"=== Designing Ultimate Graphene Metamaterial ===")
+        logger.info(f"Targets: {target_strength_gpa} GPa, {target_modulus_tpa} TPa, <{max_density_kg_m3} kg/m³")
+        
+        # Optimize design parameters
+        optimal_params = self._optimize_design_parameters(
+            target_strength_gpa, target_modulus_tpa, max_density_kg_m3
         )
         
-        results = {
-            'quantum_modeling': None,
-            'assembly_protocol': None,
-            'performance_prediction': None,
-            'manufacturing_pathway': None,
-            'overall_assessment': None
+        # Calculate quantum mechanical properties
+        quantum_results = self.quantum_model.calculate_electronic_structure(optimal_params)
+        
+        # Calculate van der Waals interactions
+        vdw_results = self.quantum_model.calculate_van_der_waals_interactions(optimal_params)
+        
+        # Design assembly pathway
+        assembly_design = self.assembly_protocol.design_assembly_pathway(optimal_params)
+        
+        # Predict performance
+        predicted_properties = self.performance_predictor.predict_mechanical_properties(
+            optimal_params, quantum_results
+        )
+        
+        # Validate design
+        design_validation = self._validate_ultimate_design(
+            optimal_params, predicted_properties, assembly_design
+        )
+        
+        # Compile complete design
+        ultimate_design = {
+            'design_parameters': optimal_params,
+            'quantum_properties': quantum_results,
+            'van_der_waals_interactions': vdw_results,
+            'assembly_design': assembly_design,
+            'predicted_properties': predicted_properties,
+            'design_validation': design_validation,
+            'performance_summary': {
+                'strength_gpa': predicted_properties.ultimate_tensile_strength_gpa,
+                'modulus_tpa': predicted_properties.in_plane_elastic_modulus_tpa,
+                'density_kg_m3': predicted_properties.density_kg_m3,
+                'strength_target_met': predicted_properties.ultimate_tensile_strength_gpa >= target_strength_gpa,
+                'modulus_target_met': predicted_properties.in_plane_elastic_modulus_tpa >= target_modulus_tpa,
+                'density_target_met': predicted_properties.density_kg_m3 <= max_density_kg_m3,
+                'all_targets_met': predicted_properties.validate_targets()
+            }
         }
         
-        try:
-            # Quantum mechanical modeling
-            quantum_results = self.quantum_mechanical_modeling(test_geometry)
-            results['quantum_modeling'] = {
-                'modeling_fidelity': quantum_results['modeling_fidelity'],
-                'quantum_effects_captured': len(quantum_results) >= 5,
-                'confinement_validated': quantum_results['confinement_energy']['confinement_strength'] > 1
-            }
-            
-            # Assembly protocol development
-            assembly_results = self.defect_free_assembly_protocol(test_geometry)
-            results['assembly_protocol'] = {
-                'protocol_validated': assembly_results['protocol_validated'],
-                'success_probability': assembly_results['success_probability'],
-                'defect_density_achieved': assembly_results['defect_density_prediction']
-            }
-            
-            # Performance prediction
-            performance_results = self.theoretical_performance_prediction(test_geometry)
-            results['performance_prediction'] = {
-                'strength_target_met': performance_results['target_validation']['strength_target_met'],
-                'modulus_target_met': performance_results['target_validation']['modulus_target_met'],
-                'performance_grade': performance_results['performance_grade'],
-                'safety_factors': performance_results['target_validation']
-            }
-            
-            # Manufacturing pathway
-            manufacturing_results = self.practical_manufacturing_pathway(test_geometry)
-            results['manufacturing_pathway'] = {
-                'pathway_validated': manufacturing_results['pathway_validated'],
-                'technology_readiness': manufacturing_results['technology_readiness']['overall_trl'],
-                'implementation_feasible': manufacturing_results['technology_readiness']['overall_trl'] >= 5
-            }
-            
-            # Overall assessment
-            validation_scores = [
-                quantum_results['modeling_fidelity'],
-                assembly_results['success_probability'],
-                1.0 if performance_results['target_validation']['strength_target_met'] and 
-                      performance_results['target_validation']['modulus_target_met'] else 0.5,
-                manufacturing_results['technology_readiness']['overall_trl'] / 9.0
-            ]
-            
-            overall_score = np.mean(validation_scores)
-            
-            results['overall_assessment'] = {
-                'validation_score': overall_score,
-                'framework_ready': overall_score >= 0.8,
-                'theoretical_breakthrough': overall_score >= 0.9,
-                'targets_achieved': {
-                    '130_gpa_strength': performance_results['target_validation']['strength_target_met'],
-                    '1_tpa_modulus': performance_results['target_validation']['modulus_target_met'],
-                    'defect_free_assembly': assembly_results['success_probability'] > 0.999
-                }
-            }
-            
-            self.logger.info(f"Comprehensive validation completed with score: {overall_score:.3f}")
-            
-        except Exception as e:
-            self.logger.error(f"Validation failed: {str(e)}")
-            results['validation_error'] = str(e)
+        logger.info("=== Ultimate Design Complete ===")
+        logger.info(f"Predicted: {predicted_properties.ultimate_tensile_strength_gpa:.1f} GPa, "
+                   f"{predicted_properties.in_plane_elastic_modulus_tpa:.2f} TPa, "
+                   f"{predicted_properties.density_kg_m3:.0f} kg/m³")
         
-        return results
+        return ultimate_design
+    
+    def _optimize_design_parameters(self, target_strength: float, target_modulus: float,
+                                   max_density: float) -> GrapheneMetamaterialParameters:
+        """Optimize design parameters for target properties"""
+        logger.info("Optimizing design parameters...")
+        
+        # Start with baseline parameters
+        best_params = GrapheneMetamaterialParameters(
+            unit_cell_size_nm=50.0,
+            strut_width_monolayers=3,
+            node_diameter_nm=5.0,
+            lattice_type='octet',  # Start with most complex for highest performance
+            defect_tolerance=1e-8,
+            assembly_temperature_k=1200.0,
+            van_der_waals_coupling=2.0
+        )
+        
+        # Iterative optimization
+        best_score = 0.0
+        
+        for unit_cell in [20, 50, 100, 200]:
+            for strut_width in [1, 2, 3, 4, 5]:
+                for lattice in ['cubic', 'bcc', 'fcc', 'octet']:
+                    for vdw_coupling in [1.0, 2.0, 5.0]:
+                        
+                        test_params = GrapheneMetamaterialParameters(
+                            unit_cell_size_nm=unit_cell,
+                            strut_width_monolayers=strut_width,
+                            node_diameter_nm=unit_cell * 0.1,
+                            lattice_type=lattice,
+                            defect_tolerance=1e-8,
+                            assembly_temperature_k=1200.0,
+                            van_der_waals_coupling=vdw_coupling
+                        )
+                        
+                        if not test_params.validate():
+                            continue
+                        
+                        # Quick performance estimate
+                        score = self._estimate_performance_score(
+                            test_params, target_strength, target_modulus, max_density
+                        )
+                        
+                        if score > best_score:
+                            best_score = score
+                            best_params = test_params
+        
+        logger.info(f"Optimized parameters: {best_params.lattice_type} lattice, "
+                   f"{best_params.unit_cell_size_nm} nm cells, "
+                   f"{best_params.strut_width_monolayers} layer struts")
+        
+        return best_params
+    
+    def _estimate_performance_score(self, params: GrapheneMetamaterialParameters,
+                                   target_strength: float, target_modulus: float,
+                                   max_density: float) -> float:
+        """Quick performance score estimation for optimization"""
+        # Simplified property estimation
+        porosity = self.performance_predictor._calculate_porosity(params)
+        density = 2200 * (1 - porosity)
+        
+        # Rough strength estimate
+        strength_factor = (1 - porosity)**1.2 * np.sqrt(params.strut_width_monolayers)
+        estimated_strength = 130 * strength_factor
+        
+        # Rough modulus estimate
+        modulus_factor = (1 - porosity)**1.5 * np.sqrt(params.strut_width_monolayers)
+        estimated_modulus = 1.0 * modulus_factor
+        
+        # Score based on target achievement
+        strength_score = min(1.0, estimated_strength / target_strength)
+        modulus_score = min(1.0, estimated_modulus / target_modulus)
+        density_score = 1.0 if density <= max_density else max_density / density
+        
+        total_score = strength_score + modulus_score + density_score
+        return total_score
+    
+    def _validate_ultimate_design(self, params: GrapheneMetamaterialParameters,
+                                 properties: TheoreticalProperties,
+                                 assembly: Dict) -> Dict:
+        """Validate complete ultimate design"""
+        validations = {
+            'parameter_validity': params.validate(),
+            'target_properties_met': properties.validate_targets(),
+            'assembly_feasible': assembly['success_probability'] >= 0.5,
+            'thermally_stable': assembly['assembly_analysis']['thermodynamic_stability'],
+            'manufacturing_viable': assembly['success_probability'] >= 0.3,
+            'defect_tolerance_met': params.defect_tolerance <= 1e-6,
+            'quantum_stability': properties.band_gap_ev >= 0.0
+        }
+        
+        overall_valid = all(validations.values())
+        validation_score = sum(validations.values()) / len(validations)
+        
+        return {
+            'individual_validations': validations,
+            'overall_design_valid': overall_valid,
+            'validation_score': validation_score,
+            'critical_issues': [k for k, v in validations.items() if not v],
+            'manufacturing_readiness_level': self._assess_manufacturing_readiness(assembly)
+        }
+    
+    def _assess_manufacturing_readiness(self, assembly: Dict) -> int:
+        """Assess manufacturing readiness level (1-9 scale)"""
+        success_prob = assembly['success_probability']
+        
+        if success_prob >= 0.8:
+            return 8  # System complete and qualified
+        elif success_prob >= 0.6:
+            return 6  # System/subsystem model demonstration
+        elif success_prob >= 0.4:
+            return 4  # Component validation in laboratory
+        elif success_prob >= 0.2:
+            return 3  # Analytical and experimental critical function
+        else:
+            return 2  # Technology concept formulated
 
-# Additional helper methods for completeness
-    def _calculate_fermi_energy_shift(self, geometry):
-        """Calculate Fermi energy shift due to quantum confinement"""
-        return 0.1 * E_CHARGE * (3.35e-10 / geometry.strut_width) ** 0.5
-    
-    def _calculate_conductivity(self, dos, energy_bins):
-        """Calculate electronic conductivity from density of states"""
-        # Simplified Drude model
-        carrier_density = np.sum(dos) * (energy_bins[1] - energy_bins[0])
-        mobility = 1.0  # m²/(V⋅s) - simplified
-        return E_CHARGE * carrier_density * mobility
-    
-    def _optimize_assembly_conditions(self, geometry):
-        """Optimize thermodynamic assembly conditions"""
-        return {
-            'temperature': 500,  # K
-            'pressure': 1e-3,   # Pa
-            'chemical_potential': -0.1 * E_CHARGE,
-            'assembly_field': 1e6  # V/m
-        }
-    
-    def _analyze_kinetic_pathways(self, geometry):
-        """Analyze kinetic pathways for assembly"""
-        return {
-            'activation_barriers': [0.1, 0.3, 0.5],  # eV
-            'reaction_rates': [1e6, 1e4, 1e2],       # s⁻¹
-            'pathway_efficiency': 0.85
-        }
-    
-    def _quantum_error_correction(self, geometry):
-        """Quantum error correction protocols"""
-        return {
-            'error_detection_rate': 0.99,
-            'correction_success_rate': 0.95,
-            'logical_error_rate': 1e-6
-        }
-    
-    def _predict_assembly_success(self, stages, conditions, pathways, correction):
-        """Predict overall assembly success probability"""
-        stage_success = np.prod([stage.get('success_rate', 0.9) 
-                               for stage in stages.values() if isinstance(stage, dict)])
-        return min(1.0, stage_success * pathways['pathway_efficiency'] * 
-                  correction['correction_success_rate'])
-    
-    def _analyze_manufacturing_scale_up(self, geometry):
-        """Analyze manufacturing scale-up requirements"""
-        return {
-            'scale_factor': 1e6,  # Lab to vessel scale
-            'equipment_requirements': ['CVD_reactors', 'lithography_systems'],
-            'facility_size': '1000_m2',
-            'scale_up_feasibility': 0.7
-        }
-    
-    def _manufacturing_cost_analysis(self, geometry):
-        """Manufacturing cost and timeline analysis"""
-        return {
-            'development_cost': 50e6,    # USD
-            'development_time': 36,     # months
-            'production_cost_per_kg': 1000,  # USD/kg
-            'break_even_volume': 1000   # kg/year
-        }
-    
-    def _assess_technology_readiness(self):
-        """Assess technology readiness level"""
-        return {
-            'individual_technologies': {
-                'graphene_synthesis': 8,
-                'template_fabrication': 6,
-                'assembly_process': 4,
-                'quality_control': 7
-            },
-            'overall_trl': 5,
-            'readiness_assessment': 'Research_to_Development'
-        }
-    
-    def _manufacturing_quality_control(self):
-        """Manufacturing quality control protocols"""
-        return {
-            'inspection_methods': ['SEM', 'AFM', 'Raman', 'XRD'],
-            'quality_metrics': ['defect_density', 'mechanical_properties'],
-            'pass_rate': 0.95,
-            'quality_assurance_level': 'Medical_Grade'
-        }
-
-# Example usage and testing
-if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
+def main():
+    """Demonstrate graphene metamaterial theoretical framework"""
+    logger.info("=== Graphene Metamaterial Theoretical Framework ===")
     
     # Initialize framework
     framework = GrapheneMetamaterialFramework()
     
-    # Run comprehensive validation
-    validation_results = framework.comprehensive_validation_suite()
-    
-    # Display results
-    print("\n" + "="*70)
-    print("GRAPHENE METAMATERIAL THEORETICAL FRAMEWORK")
-    print("="*70)
-    
-    if 'overall_assessment' in validation_results:
-        assessment = validation_results['overall_assessment']
-        print(f"Validation Score: {assessment['validation_score']:.3f}")
-        print(f"Framework Ready: {assessment['framework_ready']}")
-        print(f"Theoretical Breakthrough: {assessment['theoretical_breakthrough']}")
-        print(f"130 GPa Strength Target: {assessment['targets_achieved']['130_gpa_strength']}")
-        print(f"1 TPa Modulus Target: {assessment['targets_achieved']['1_tpa_modulus']}")
-        print(f"Defect-Free Assembly: {assessment['targets_achieved']['defect_free_assembly']}")
-        
-        if assessment['theoretical_breakthrough']:
-            print("\n✅ THEORETICAL BREAKTHROUGH ACHIEVED")
-            print("🚀 Graphene metamaterial framework ready for implementation")
-        else:
-            print("\n⚠️ FRAMEWORK REQUIRES ADDITIONAL RESEARCH")
+    # Design ultimate metamaterial
+    ultimate_design = framework.design_ultimate_metamaterial(
+        target_strength_gpa=130.0,
+        target_modulus_tpa=1.0,
+        max_density_kg_m3=500.0
+    )
     
     # Save results
-    with open('graphene_metamaterial_validation_results.json', 'w') as f:
-        json.dump(validation_results, f, indent=2, default=str)
+    with open('graphene_metamaterial_design.json', 'w') as f:
+        json.dump(ultimate_design, f, indent=2, default=str)
     
-    print(f"\nResults saved to: graphene_metamaterial_validation_results.json")
-    print(f"Timestamp: {datetime.now().isoformat()}")
+    # Print summary
+    logger.info("\n=== Design Summary ===")
+    performance = ultimate_design['performance_summary']
+    logger.info(f"Strength: {performance['strength_gpa']:.1f} GPa (target: 130.0 GPa)")
+    logger.info(f"Modulus: {performance['modulus_tpa']:.2f} TPa (target: 1.0 TPa)")
+    logger.info(f"Density: {performance['density_kg_m3']:.0f} kg/m³ (max: 500 kg/m³)")
+    logger.info(f"All targets met: {performance['all_targets_met']}")
+    
+    validation = ultimate_design['design_validation']
+    logger.info(f"Design valid: {validation['overall_design_valid']}")
+    logger.info(f"Validation score: {validation['validation_score']:.3f}")
+    logger.info(f"Manufacturing readiness: Level {validation['manufacturing_readiness_level']}")
+    
+    if validation['critical_issues']:
+        logger.warning(f"Critical issues: {validation['critical_issues']}")
+    
+    logger.info(f"Results saved to: graphene_metamaterial_design.json")
+    
+    return ultimate_design
+
+if __name__ == "__main__":
+    main()
