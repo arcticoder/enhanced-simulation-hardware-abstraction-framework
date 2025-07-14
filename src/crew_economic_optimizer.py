@@ -52,16 +52,16 @@ class CrewRole(Enum):
 @dataclass
 class EconomicParameters:
     """Economic parameters for crew optimization."""
-    base_vessel_cost: float = 2.5e9  # $2.5B base vessel cost
-    crew_training_cost: float = 500000  # $500K per crew member
-    life_support_cost_per_person: float = 10000  # $10K per person per day
-    medical_bay_cost: float = 5e6  # $5M medical bay
-    passenger_revenue_per_day: float = 50000  # $50K per passenger per day
-    mission_insurance_base: float = 100e6  # $100M base insurance
-    fuel_cost_multiplier: float = 1.2  # 20% increase per 10 crew members
-    maintenance_cost_factor: float = 0.05  # 5% of vessel cost annually
-    emergency_fund_ratio: float = 0.15  # 15% emergency fund
-    profit_margin_target: float = 0.20  # 20% profit margin target
+    base_vessel_cost: float = 500e6  # $500M base vessel cost (realistic for advanced spacecraft)
+    crew_training_cost: float = 100000  # $100K per crew member (realistic astronaut training)
+    life_support_cost_per_person: float = 1000  # $1K per person per day (reasonable life support)
+    medical_bay_cost: float = 10e6  # $10M medical bay (comprehensive)
+    passenger_revenue_per_day: float = 100000  # $100K per passenger per day (luxury space travel)
+    mission_insurance_base: float = 50e6  # $50M base insurance (reasonable for space missions)
+    fuel_cost_multiplier: float = 1.1  # 10% increase per 10 crew members
+    maintenance_cost_factor: float = 0.02  # 2% of vessel cost annually (reduced)
+    emergency_fund_ratio: float = 0.10  # 10% emergency fund (reduced)
+    profit_margin_target: float = 0.15  # 15% profit margin target
 
 @dataclass
 class CrewConfiguration:
@@ -573,6 +573,12 @@ class CrewEconomicOptimizer:
             
             operational_crew = command + engineering + medical + science + maintenance + security + support
             passengers = max(0, total_crew - operational_crew)
+            
+            # Fix rounding issues by adjusting support crew
+            actual_total = command + engineering + medical + science + maintenance + security + passengers + support
+            if actual_total != total_crew:
+                support += (total_crew - actual_total)
+                support = max(0, support)  # Ensure non-negative
             
             optimal_config = CrewConfiguration(
                 total_crew=total_crew,
