@@ -41,7 +41,13 @@ class LifeSupportIntegrationManager:
     Manager for life support system integration across multiple repositories.
     
     Coordinates with 8 primary integration repositories for comprehensive
-    life support capabilities supporting ≤100 crew for 30-day missions.
+    life support capabilities supporting ≤100 crew for 120-day total mission duration.
+    
+    Mission Profile:
+    - Outbound Transit: 30 days maximum supraluminal 
+    - System Operations: 30 days orbital survey and analysis
+    - Return Transit: 30 days maximum supraluminal
+    - Contingency Buffer: 30 days safety margin for emergency scenarios
     """
     
     def __init__(self):

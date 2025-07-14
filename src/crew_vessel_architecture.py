@@ -2,12 +2,19 @@
 Multi-Crew Vessel Architecture - Production Implementation
 
 This module implements a comprehensive multi-crew interstellar vessel architecture supporting 
-≤100 personnel, 30-day endurance, and optimized crew operations for LQG FTL missions.
+≤100 personnel, 120-day total mission endurance, and optimized crew operations for LQG FTL missions.
+
+Mission Profile:
+- Outbound Transit: 30 days maximum supraluminal (Earth → Proxima Centauri)
+- System Operations: 30 days orbital survey, surface operations, scientific analysis
+- Return Transit: 30 days maximum supraluminal (Proxima Centauri → Earth)  
+- Contingency Buffer: 30 days safety margin for delays, extended operations, emergency scenarios
+- Total Mission Duration: 120 days complete round-trip capability
 
 Features:
-- Advanced life support systems (99.9% efficiency)
+- Advanced life support systems (99.9% efficiency, 120-day consumables)
 - Emergency evacuation protocols (<60s evacuation)
-- Crew quarters optimization (15m³ per crew, 1g artificial gravity)
+- Crew quarters optimization (15m³ per crew, 1g artificial gravity, 4-month hab modules)
 - Integrated command and control systems
 
 References:
@@ -492,12 +499,19 @@ class MultiCrewVesselArchitecture:
     """
     Complete Multi-Crew Vessel Architecture for Interstellar Missions.
     
-    Integrates all subsystems for ≤100 personnel, 30-day endurance operations
+    Integrates all subsystems for ≤100 personnel, 120-day total mission endurance
     with comprehensive life support, emergency protocols, crew quarters,
     and command/control systems.
+    
+    Mission Profile:
+    - Outbound Transit: 30 days maximum supraluminal (Earth → Proxima Centauri)
+    - System Operations: 30 days orbital survey, surface operations, scientific analysis
+    - Return Transit: 30 days maximum supraluminal (Proxima Centauri → Earth)
+    - Contingency Buffer: 30 days safety margin for delays, extended operations, emergency scenarios
+    - Total Mission Duration: 120 days complete round-trip capability
     """
     
-    def __init__(self, crew_capacity: int = 100, mission_duration_days: int = 30):
+    def __init__(self, crew_capacity: int = 100, mission_duration_days: int = 120):
         self.crew_capacity = crew_capacity
         self.mission_duration_days = mission_duration_days
         self.vessel_id = f"ICV-{int(time.time())}"  # Interstellar Crew Vessel
@@ -662,7 +676,7 @@ class MultiCrewVesselArchitecture:
 # Example usage and testing
 if __name__ == "__main__":
     # Create and initialize vessel
-    vessel = MultiCrewVesselArchitecture(crew_capacity=100, mission_duration_days=30)
+    vessel = MultiCrewVesselArchitecture(crew_capacity=100, mission_duration_days=120)
     
     # Initialize all systems
     if vessel.initialize_vessel():
