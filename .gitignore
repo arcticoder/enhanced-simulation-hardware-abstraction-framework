@@ -200,3 +200,5 @@ output/
 
 # Progress tracking
 update-progress.txt
+
+.github/instructions/copilot-instructions.md
