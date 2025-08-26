@@ -1,6 +1,6 @@
 # Enhanced Simulation Hardware Abstraction Framework
 
-## Revolutionary Physics Simulation & Tokamak Design Integration (Q-Factor 49.3)
+## Research-Stage Physics Simulation & Tokamak Design Integration (reported Q-Factor 49.3)
 
 ## Related Repositories
 
@@ -14,7 +14,7 @@ All repositories are part of the [arcticoder](https://github.com/arcticoder) eco
 
 ## 🔋 Advanced Tokamak Vacuum Chamber Design Integration
 
-**BREAKTHROUGH COMPLETE**: This framework now includes revolutionary **AI-driven tokamak vacuum chamber design system** achieving **Q-factor 49.3** with **95% LQG enhancement**. The comprehensive design suite provides construction-ready specifications with genetic algorithm optimization and neural network physics integration.
+This repository includes research-stage AI-driven tokamak vacuum chamber design prototypes. Reported model outputs indicate a Q-factor near 49.3 and LQG-related model improvements; these are simulation results and should not be treated as validated, construction-ready specifications. Reproducibility artifacts, raw data, and uncertainty quantification are referenced in `docs/`.
 
 ### Key Tokamak System Features
 - **Optimal Design Parameters**: R = 4.2m, a = 1.3m, κ = 1.8, δ = 0.4, μ = 0.3
@@ -27,14 +27,13 @@ This tokamak system is fully integrated with the enhanced simulation framework, 
 
 A revolutionary physics simulation framework achieving quantum-limited precision measurements with comprehensive uncertainty quantification. This framework integrates advanced digital twin capabilities, multi-physics coupling, and hardware-in-the-loop synchronization to deliver unprecedented accuracy in theoretical physics simulations.
 
-## 🚀 IMPLEMENTATION COMPLETE: Multi-Crew Vessel Architecture
+## 🚀 Multi-Crew Vessel Architecture (research-stage summaries)
 
-### Revolutionary Achievement: Interstellar Crew Vessel System (July 2025)
+### Research-Stage Summary: Interstellar Crew Vessel System (July 2025)
 
-**Status**: ✅ **IMPLEMENTATION COMPLETE** - Production-ready multi-crew vessel architecture
-**Capability**: ≤100 personnel, 120-day total mission endurance for Earth-Proxima-Centauri missions
-**Framework**: Complete vessel architecture with life support, emergency systems, crew quarters, and command control
-**Achievement**: 1,450+ lines production framework with comprehensive multi-repository integration
+**Status**: Research-stage architecture and simulation outputs. The repository documents prototype designs and simulation-derived metrics (e.g., personnel and endurance estimates). These items are model outputs and require independent engineering validation, formal V&V, and certification before any operational use.
+
+**Capability (reported)**: Model-derived scenarios for ≤100 personnel and simulated endurance estimates (e.g., 120-day round-trip scenarios) — use as guidance for follow-up engineering and validation activities.
 
 #### Mission Profile
 - **Outbound Transit**: 30 days maximum supraluminal (Earth → Proxima Centauri)
@@ -55,14 +54,13 @@ A revolutionary physics simulation framework achieving quantum-limited precision
 - **Crew Habitat**: 15m³ per crew with 1g artificial gravity and 4-month hab modules
 - **Command Control**: 12-station bridge with 85% automation and AI assistance
 
-## 🚀 IMPLEMENTATION COMPLETE: Crew Complement Optimization Framework
+## 🚀 Crew Complement Optimization Framework (research-stage)
 
-### Revolutionary Achievement: Interstellar Crew Management System (July 2025)
+### Research-Stage Summary: Crew Management System (July 2025)
 
-**Status**: ✅ **IMPLEMENTATION COMPLETE** - World's first crew complement optimization framework
-**Capability**: 1-100 personnel optimization for Earth-Proxima-Centauri missions
-**Framework**: 4-component system with genetic algorithms and Monte Carlo simulation
-**Achievement**: 3,300+ lines production framework with economic modeling, role optimization, mission integration, and validation
+**Status**: Prototype optimization framework and analysis tools. Reported capabilities are based on simulation and economic models and require additional independent validation before operational planning.
+
+**Capability (reported)**: Modeling and optimization for crew complements (1-100 personnel) using genetic algorithms and Monte Carlo simulation; results are illustrative and intended to guide further design and validation.
 
 #### Key Components
 - **Economic Modeling**: Activity-based costing with Monte Carlo simulation (1,100+ lines)
@@ -77,13 +75,13 @@ A revolutionary physics simulation framework achieving quantum-limited precision
 - **Cross-training Efficiency**: η = Skills_actual/Skills_required capability maximization
 - **Mission-specific Adaptation**: Phase-specific optimization for transit, operations, and return
 
-## 🚀 PRODUCTION COMPLETE: Advanced FTL Hull Optimization Framework
+## FTL Hull Optimization Framework (research-stage)
 
-### Revolutionary Achievement: 48c Superluminal Vessel Design (July 2025)
+### Research-Stage Summary: Superluminal Hull Design (July 2025)
 
-**Status**: ✅ **PRODUCTION COMPLETE** - World's first advanced hull optimization framework
-**Performance**: 48c velocity capability with 2.4x-6.4x safety factors across all materials
-**Achievement**: 414-line production framework exceeding all requirements by 140-540%
+**Status**: Simulation and optimization artifacts exploring high-velocity hull geometries and material models. Reported velocity and safety-factor claims are model-derived and require rigorous experimental validation, independent peer review, and compliance checks before any real-world interpretation or use.
+
+**Performance (reported)**: Model outputs include hypothetical velocity envelopes and material safety factor estimates; treat these as exploratory simulation results rather than validated operational specifications.
 
 #### 🎯 Final Implementation Results
 
