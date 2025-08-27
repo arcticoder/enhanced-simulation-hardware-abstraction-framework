@@ -1,5 +1,52 @@
 # Enhanced Simulation Hardware Abstraction Framework
 
+This repository contains research-stage simulation tools, digital-twin components, and example prototypes for multi-physics modeling and hardware-in-the-loop (HIL) experiments. The content documents modeling work and should be interpreted as simulation- and model-derived results unless explicit experimental artifacts are provided in `docs/`.
+
+Important: numerical values and "achievements" presented in this repository are model outputs. Before treating any numeric claim as validated or production-ready, maintainers and readers should consult the associated raw artifacts, test outputs, and uncertainty-quantification (UQ) analyses located under `docs/` (when present).
+
+## Quick guidance for maintainers
+
+- When asserting operational readiness or production status, attach the raw data files, the test script(s), the execution environment (OS, Python/containers), and a short UQ summary that shows confidence intervals or sensitivity analyses.
+- Prefer research-stage phrasing for claim statements (e.g., "model-derived", "prototype", "research-stage") unless backed by experimental validation and third-party review.
+- Add a `docs/Scope_Validation_Limitations.md` file or expand `docs/` with V&V/UQ artifacts to increase reproducibility.
+
+## Scope, Validation & Limitations
+
+- Scope: This repository focuses on numerical experiments, integration patterns for simulation components, and tooling for UQ tracking. It is not an engineering specification or construction guide.
+- Validation: The project contains unit and integration tests that validate code behavior. Where claims reference physical performance (e.g., material strengths, velocities, or operational safety), provide the accompanying measurement artifacts and uncertainty analysis in `docs/` before citing those values externally.
+- Limitations: Model outputs depend on input datasets, boundary conditions, solver settings, and assumptions in the code base. Sensitivity to these inputs should be reported via confidence intervals or parameter sweeps.
+
+## Reproducibility pointers
+
+- `test_framework.py` — example test harness used by authors. Run locally to reproduce software-level tests.
+- `docs/` — suggested place for raw outputs, plots, and UQ reports. If these are missing, consider adding `docs/UQ-notes.md` and `docs/benchmarks.md`.
+
+## How to run the software (example)
+
+```bash
+# Clone repository
+git clone https://github.com/arcticoder/enhanced-simulation-hardware-abstraction-framework.git
+cd enhanced-simulation-hardware-abstraction-framework
+
+# Install dependencies (if provided)
+pip install -r requirements.txt
+
+# Run the test harness (example)
+python test_framework.py
+```
+
+## About numerical claims
+
+This README aims to avoid unqualified, absolutist language. If you see statements such as "production-ready", "100% UQ resolution", or explicit single-number assertions without attached artifacts, please file a PR that either:
+
+1. Adds the artifacts and UQ scripts that justify the claim, or
+2. Rewrites the claim to conservative research-stage wording.
+
+---
+
+If you'd like, I can (automatically) scan this repository for strong claim keywords and either: (a) suggest replacement phrasing inline, or (b) create `docs/GH_ABOUT_SUGGESTION.md` with conservative short & long descriptions for the repository About field.
+# Enhanced Simulation Hardware Abstraction Framework
+
 ## Research-Stage Physics Simulation & Tokamak Design Integration (reported Q-Factor 49.3)
 
 ## Related Repositories
